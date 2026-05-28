@@ -1,0 +1,6 @@
+{
+  "name": "Video Compressor & Editor",
+  "description": "Compressed video to 720p 30fps and replace/add background music by extracting audio from another video.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
