@@ -145,9 +145,32 @@ async function startServer() {
               status: runStatus,
               results: items.map((item: any, idx: number) => {
                 // Heuristics to find video/audio download link from TikTok/Instagram dataset
-                const resolvedVideo = item.videoUrl || item.downloadUrl || item.video_url || item.url || item.directUrl || link;
-                const resolvedTitle = item.title || item.description || item.caption || `Media File Extracted #${idx + 1}`;
-                const resolvedCreator = item.author?.username || item.author?.nickname || item.username || item.owner?.username || "Unknown Creator";
+                let resolvedVideo = item.videoUrl || item.nowatermarkVideoUrl || item.downloadUrl || item.video_url || item.play || item.directUrl || item.url;
+                
+                if (!resolvedVideo && item.video) {
+                  if (typeof item.video === "string") {
+                    resolvedVideo = item.video;
+                  } else if (typeof item.video === "object") {
+                    resolvedVideo = item.video.play_addr || item.video.downloadAddr || item.video.url || (item.video.url_list && item.video.url_list[0]);
+                  }
+                }
+                if (!resolvedVideo) {
+                  resolvedVideo = link;
+                }
+
+                const resolvedTitle = item.title || item.description || item.caption || item.desc || `Media File Extracted #${idx + 1}`;
+                
+                let resolvedCreator = "Unknown Creator";
+                if (item.author) {
+                  if (typeof item.author === "string") {
+                    resolvedCreator = item.author;
+                  } else if (typeof item.author === "object") {
+                    resolvedCreator = item.author.uniqueId || item.author.username || item.author.nickname || item.author.name || "Unknown Creator";
+                  }
+                } else {
+                  resolvedCreator = item.username || item.owner?.username || item.creator || "Unknown Creator";
+                }
+
                 const resolvedDuration = Number(item.duration) || 15;
 
                 return {
