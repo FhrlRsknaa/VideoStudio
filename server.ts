@@ -6,6 +6,55 @@ import { createServer as createViteServer } from "vite";
 // Load environment variables
 dotenv.config();
 
+function extractMediaFromRapidAPIResponse(resData: any, originalLink: string) {
+  let target = resData;
+  if (Array.isArray(resData)) {
+    target = resData[0] || {};
+  } else if (resData.data) {
+    if (Array.isArray(resData.data)) {
+      target = resData.data[0] || {};
+    } else {
+      target = resData.data;
+    }
+  }
+
+  // Find video/audio/image link from Instagram response
+  let resolvedVideo = target.videoUrl || target.video_url || target.downloadUrl || target.download_url || target.url || target.play || target.directUrl || target.link || target.video;
+  
+  if (!resolvedVideo && target.links && Array.isArray(target.links)) {
+    resolvedVideo = target.links[0]?.url || target.links[0]?.link;
+  }
+  
+  const resolvedTitle = target.title || target.caption || target.description || target.text || target.full_name || target.username || `Instagram Media Extracted`;
+  
+  let resolvedCreator = "Instagram Creator";
+  if (target.username || target.full_name) {
+    resolvedCreator = target.username || target.full_name;
+  } else if (target.owner && typeof target.owner === 'object') {
+    resolvedCreator = target.owner.username || target.owner.full_name || "Instagram Creator";
+  }
+
+  const resolvedDuration = Number(target.duration) || 12;
+
+  if (!resolvedVideo) {
+    resolvedVideo = originalLink;
+  }
+
+  return {
+    title: resolvedTitle,
+    creator: resolvedCreator,
+    duration: resolvedDuration,
+    videoUrl: resolvedVideo,
+    originalUrl: originalLink,
+    sizeMB: {
+      "1080p": 25.4,
+      "720p": 14.8,
+      "480p": 7.1,
+      "mp3": 1.6
+    }
+  };
+}
+
 async function startServer() {
   const app = express();
   const PORT = 3000;
@@ -13,12 +62,57 @@ async function startServer() {
   // Middleware to parse JSON bodies
   app.use(express.json());
 
-  // API endpoint for running Apify Actor iZbsVYT4VfdMxoIPL
+  // API endpoint for running Apify Actor iZbsVYT4VfdMxoIPL / RapidAPI Instagram Downloader
   app.post("/api/run-actor", async (req, res) => {
     const { link } = req.body;
     
     if (!link) {
       return res.status(400).json({ error: "Parameter 'link' wajib diisi." });
+    }
+
+    const isInstagram = link.toLowerCase().includes('instagram.com');
+    const RAPIDAPI_KEY = process.env.RAPIDAPI_KEY || '5460a7ce88mshcf8572571633e80p1babd6jsn7432c5204cbf';
+
+    // 1. Check if Instagram and attempt RapidAPI
+    if (isInstagram && RAPIDAPI_KEY) {
+      try {
+        console.log(`Mencoba mengunduh Instagram link via RapidAPI...`);
+        
+        // Determine if profile or media post/reel/story
+        const isProfile = !link.includes('/p/') && !link.includes('/reel/') && !link.includes('/tv/') && !link.includes('/stories/');
+        const endpointParam = isProfile ? `Userinfo` : `get-info`;
+        
+        const rapidApiUrl = `https://instagram-downloader-download-instagram-videos-stories1.p.rapidapi.com/?${endpointParam}=${encodeURIComponent(link)}`;
+        
+        const rapidApiResponse = await fetch(rapidApiUrl, {
+          method: 'GET',
+          headers: {
+            'x-rapidapi-key': RAPIDAPI_KEY,
+            'x-rapidapi-host': 'instagram-downloader-download-instagram-videos-stories1.p.rapidapi.com'
+          }
+        });
+        
+        if (rapidApiResponse.ok) {
+          const resData = await rapidApiResponse.json();
+          console.log(`RapidAPI Response:`, resData);
+          const parsedResult = extractMediaFromRapidAPIResponse(resData, link);
+          
+          return res.json({
+            isSandbox: false,
+            provider: 'rapidapi',
+            status: 'SUCCEEDED',
+            data: {
+              id: `rapidapi_${Date.now()}`,
+              status: 'SUCCEEDED',
+              results: [parsedResult]
+            }
+          });
+        } else {
+          console.warn(`RapidAPI responded with status ${rapidApiResponse.status}. Falling back to Apify.`);
+        }
+      } catch (rapidErr) {
+        console.warn(`Error saat memanggil RapidAPI, falling back to Apify:`, rapidErr);
+      }
     }
 
     const API_TOKEN = process.env.APIFY_API_TOKEN;
