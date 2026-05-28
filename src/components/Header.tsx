@@ -1,8 +1,8 @@
-import { Video, Music, Sparkles } from 'lucide-react';
+import { Video, Music, Sparkles, Download } from 'lucide-react';
 
 interface HeaderProps {
-  activeTab: 'compress' | 'editor';
-  setActiveTab: (tab: 'compress' | 'editor') => void;
+  activeTab: 'downloader' | 'compress';
+  setActiveTab: (tab: 'downloader' | 'compress') => void;
 }
 
 export default function Header({ activeTab, setActiveTab }: HeaderProps) {
@@ -18,12 +18,25 @@ export default function Header({ activeTab, setActiveTab }: HeaderProps) {
             <h1 className="text-xl font-bold text-[#0b57d0] tracking-tight">
               VideoStudio
             </h1>
-            <p className="text-xs text-[#747775] font-semibold">Compressor & Audio Overlap</p>
+            <p className="text-xs text-[#747775] font-semibold">mengompress video agar pas untuk status whatsaap ( UJI PENGEMBANGAN )</p>
           </div>
         </div>
 
         {/* Material You Style Segmented Control Tab */}
         <nav className="flex bg-[#f0f4f9] p-1.5 rounded-full border border-[#dee1e5]">
+          <button
+            id="tab-downloader"
+            onClick={() => setActiveTab('downloader')}
+            className={`flex items-center gap-2 px-6 py-2.5 text-sm font-semibold rounded-full transition-all duration-300 ${
+              activeTab === 'downloader'
+                ? 'bg-[#0b57d0] text-white shadow-md shadow-blue-100'
+                : 'text-[#444746] hover:text-[#0b57d0] hover:bg-[#d3e3fd]/40'
+            }`}
+          >
+            <Download className="w-4 h-4" />
+            Media Downloader
+          </button>
+
           <button
             id="tab-compress"
             onClick={() => setActiveTab('compress')}
@@ -35,19 +48,6 @@ export default function Header({ activeTab, setActiveTab }: HeaderProps) {
           >
             <Video className="w-4 h-4" />
             Kompres Video
-          </button>
-          
-          <button
-            id="tab-editor"
-            onClick={() => setActiveTab('editor')}
-            className={`flex items-center gap-2 px-6 py-2.5 text-sm font-semibold rounded-full transition-all duration-300 ${
-              activeTab === 'editor'
-                ? 'bg-[#0b57d0] text-white shadow-md shadow-blue-100'
-                : 'text-[#444746] hover:text-[#0b57d0] hover:bg-[#d3e3fd]/40'
-            }`}
-          >
-            <Music className="w-4 h-4" />
-            Editor Musik Video
           </button>
         </nav>
       </div>

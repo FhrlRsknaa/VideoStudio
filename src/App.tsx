@@ -6,11 +6,11 @@
 import { useState } from 'react';
 import Header from './components/Header';
 import Compressor from './components/Compressor';
-import Editor from './components/Editor';
-import { Info, HelpCircle } from 'lucide-react';
+import Downloader from './components/Downloader';
+import { Info } from 'lucide-react';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'compress' | 'editor'>('compress');
+  const [activeTab, setActiveTab] = useState<'downloader' | 'compress'>('downloader');
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col antialiased selection:bg-blue-100 selection:text-blue-800">
@@ -20,7 +20,26 @@ export default function App() {
       {/* Main Content Area */}
       <main className="flex-grow">
         {/* Dynamic Section rendering with gorgeous fluid entry */}
-        {activeTab === 'compress' ? (
+        {activeTab === 'downloader' ? (
+          <div>
+            {/* Visual Intro banner for Downloader section */}
+            <div className="w-full bg-white border-b border-blue-50/30 py-8 px-4 text-center">
+              <div className="max-w-2xl mx-auto space-y-2">
+                <span className="px-3 py-1 bg-blue-50 text-[11px] font-bold text-blue-700 rounded-full tracking-wider uppercase">
+                  All-In-One Downloader
+                </span>
+                <h2 className="text-2xl font-extrabold text-[#1f1f1f] tracking-tight sm:text-3xl uppercase">
+                  ALL IN ONE MEDIA DOWNLOADER
+                </h2>
+                <p className="text-sm text-gray-500 max-w-lg mx-auto leading-relaxed">
+                  Download video favoritmu secara instan dari Youtube, Tiktok, Instagram Reels, Twitter, maupun Direct Link murni langsung ke galeri gawai Anda.
+                </p>
+              </div>
+            </div>
+            
+            <Downloader />
+          </div>
+        ) : (
           <div>
             {/* Visual Intro banner for Compressor section */}
             <div className="w-full bg-white border-b border-blue-50/30 py-8 px-4 text-center">
@@ -28,35 +47,16 @@ export default function App() {
                 <span className="px-3 py-1 bg-blue-50 text-[11px] font-bold text-blue-700 rounded-full tracking-wider uppercase">
                   Optimal 720p 30fps
                 </span>
-                <h2 className="text-2xl font-extrabold text-gray-900 tracking-tight sm:text-3xl">
-                  Kompresor Video Instan
+                <h2 className="text-2xl font-extrabold text-[#1f1f1f] tracking-tight sm:text-3xl">
+                  BUAT VIDEO KAMU MENJADI HD DI WHATSAAP
                 </h2>
                 <p className="text-sm text-gray-500 max-w-lg mx-auto leading-relaxed">
                   Perkecil ukuran file video Anda menjadi standard resolusi optimal 720p pada frame rate 30 FPS tanpa mengurangi kestabilan sinyal audio asli.
                 </p>
               </div>
             </div>
-            
-            <Compressor />
-          </div>
-        ) : (
-          <div>
-            {/* Visual Intro banner for Editor section */}
-            <div className="w-full bg-white border-b border-blue-50/30 py-8 px-4 text-center">
-              <div className="max-w-2xl mx-auto space-y-2">
-                <span className="px-3 py-1 bg-blue-50 text-[11px] font-bold text-blue-700 rounded-full tracking-wider uppercase">
-                  Ekstraktor & Audio Mixer
-                </span>
-                <h2 className="text-2xl font-extrabold text-gray-900 tracking-tight sm:text-3xl">
-                  Gabung & Tempel Musik Video
-                </h2>
-                <p className="text-sm text-gray-500 max-w-lg mx-auto leading-relaxed">
-                  Ganti musik latar video dengan mengekstrak suara dari video lain secara langsung. Atur volume dari masing-masing track audio secara presisi.
-                </p>
-              </div>
-            </div>
 
-            <Editor />
+            <Compressor />
           </div>
         )}
       </main>
