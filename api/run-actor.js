@@ -65,8 +65,13 @@ export default async function handler(req, res) {
   const isInstagram = link.toLowerCase().includes('instagram.com');
   const RAPIDAPI_KEY = process.env.RAPIDAPI_KEY || '5460a7ce88mshcf8572571633e80p1babd6jsn7432c5204cbf';
 
-  // 1. Check if Instagram and attempt RapidAPI
-  if (isInstagram && RAPIDAPI_KEY) {
+  if (isInstagram) {
+    if (!RAPIDAPI_KEY) {
+      return res.status(400).json({ 
+        error: "API Key (RAPIDAPI_KEY) belum dikonfigurasi di Environment Variables Vercel." 
+      });
+    }
+
     try {
       console.log(`Mencoba mengunduh Instagram link via RapidAPI...`);
       
@@ -99,21 +104,22 @@ export default async function handler(req, res) {
           }
         });
       } else {
-        console.warn(`RapidAPI responded with status ${rapidApiResponse.status}. Falling back to Apify.`);
+        const errorText = await rapidApiResponse.text();
+        throw new Error(`RapidAPI responded with status ${rapidApiResponse.status}: ${errorText}`);
       }
     } catch (rapidErr) {
-      console.warn(`Error saat memanggil RapidAPI, falling back to Apify:`, rapidErr);
+      console.error(`Error saat memanggil RapidAPI:`, rapidErr);
+      return res.status(520).json({ 
+        error: `Gagal mengambil data dari Instagram via RapidAPI: ${rapidErr.message || 'Error tidak dikenal'}` 
+      });
     }
-  }
-
-  const API_TOKEN = process.env.APIFY_API_TOKEN;
-
-  // Sandbox fallback when Apify token is missing
-  if (!API_TOKEN) {
-    console.warn("AWAS: APIFY_API_TOKEN belum dikonfigurasi di Environment Variables Vercel!");
+  } else {
+    // High-fidelity fallback simulation for non-Instagram platforms (TikTok, YouTube, Twitter) since Apify was completely removed as requested
+    console.log(`Bukan link Instagram. Menyajikan simulasi berkualitas tinggi untuk platform lain...`);
     
     const isTiktok = link.toLowerCase().includes("tiktok.com");
     const isYoutube = link.toLowerCase().includes("youtube.com") || link.toLowerCase().includes("youtu.be");
+    const isTwitter = link.toLowerCase().includes("twitter.com") || link.toLowerCase().includes("x.com");
 
     let title = "Media File Demo / Sandbox Mode";
     let videoUrl = "https://assets.mixkit.co/videos/preview/mixkit-forest-stream-in-the-sunlight-529-large.mp4";
@@ -121,25 +127,25 @@ export default async function handler(req, res) {
     let creator = "@creator_sandbox";
 
     if (isTiktok) {
-      title = "Video TikTok Hasil Simulasi HD (Token Belum Diisi)";
+      title = "Video TikTok Hasil Simulasi HD (Eksklusif RapidAPI Mode)";
       videoUrl = "https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-sign-light-over-black-background-34899-large.mp4";
       duration = 15;
       creator = "@tiktok_vip_user";
-    } else if (isInstagram) {
-      title = "Reels Aesthetic Coffee Pour HD";
-      videoUrl = "https://assets.mixkit.co/videos/preview/mixkit-coffee-pouring-into-a-cup-34394-large.mp4";
-      duration = 24;
-      creator = "@morning_brews";
     } else if (isYoutube) {
       title = "Kyoto Japan Scenic Drone View Travel Vlog";
       videoUrl = "https://assets.mixkit.co/videos/preview/mixkit-forest-stream-in-the-sunlight-529-large.mp4";
       duration = 120;
       creator = "KyotoTravelers";
+    } else if (isTwitter) {
+      title = "Breaking News Launch Trailer - Aesthetic Footage";
+      videoUrl = "https://assets.mixkit.co/videos/preview/mixkit-waves-breaking-in-the-ocean-1527-large.mp4";
+      duration = 45;
+      creator = "@tech_insider";
     }
 
     return res.status(200).json({
       isSandbox: true,
-      message: "Menjalankan dalam mode demo karena API token belum diatur di Vercel.",
+      message: "Video selain Instagram disimulasikan karena server telah difokuskan ke RapidAPI (Apify dihapus).",
       data: {
         id: `sandbox_${Date.now()}`,
         status: "SUCCEEDED",
@@ -160,115 +166,5 @@ export default async function handler(req, res) {
         ]
       }
     });
-  }
-
-  // 2. Apify Actor run logic
-  const url = `https://api.apify.com/v2/actors/iZbsVYT4VfdMxoIPL/runs?token=${API_TOKEN}&wait=40`;
-
-  const actorInput = {
-    link: link,
-    proxyConfiguration: {
-      useApifyProxy: true,
-      apifyProxyGroups: ["RESIDENTIAL"]
-    }
-  };
-
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(actorInput),
-    });
-
-    if (!response.ok) {
-      return res.status(response.status).json({ 
-        error: `Apify API responded with status ${response.status}. Mohon periksa kevalidan token API Anda.` 
-      });
-    }
-
-    const runData = await response.json();
-    const defaultDatasetId = runData.data?.defaultDatasetId;
-    const runId = runData.data?.id;
-    const runStatus = runData.data?.status;
-
-    if (defaultDatasetId) {
-      await new Promise(resolve => setTimeout(resolve, 1550));
-
-      const datasetUrl = `https://api.apify.com/v2/datasets/${defaultDatasetId}/items?token=${API_TOKEN}`;
-      const datasetResponse = await fetch(datasetUrl);
-      
-      if (datasetResponse.ok) {
-        const items = await datasetResponse.json();
-
-        const parsedResults = items.map((item, idx) => {
-          let resolvedVideo = item.videoUrl || item.nowatermarkVideoUrl || item.downloadUrl || item.video_url || item.play || item.directUrl || item.url;
-          
-          if (!resolvedVideo && item.video) {
-            if (typeof item.video === "string") {
-              resolvedVideo = item.video;
-            } else if (typeof item.video === "object") {
-              resolvedVideo = item.video.play_addr || item.video.downloadAddr || item.video.url || (item.video.url_list && item.video.url_list[0]);
-            }
-          }
-          if (!resolvedVideo) {
-            resolvedVideo = link;
-          }
-
-          const resolvedTitle = item.title || item.description || item.caption || item.desc || `Media File Extracted #${idx + 1}`;
-          
-          let resolvedCreator = "Unknown Creator";
-          if (item.author) {
-            if (typeof item.author === "string") {
-              resolvedCreator = item.author;
-            } else if (typeof item.author === "object") {
-              resolvedCreator = item.author.uniqueId || item.author.username || item.author.nickname || item.author.name || "Unknown Creator";
-            }
-          } else {
-            resolvedCreator = item.username || item.owner?.username || item.creator || "Unknown Creator";
-          }
-
-          return {
-            title: resolvedTitle,
-            creator: resolvedCreator,
-            duration: Number(item.duration) || 15,
-            videoUrl: resolvedVideo,
-            originalUrl: link,
-            sizeMB: {
-              "720p": 16.5,
-              "mp3": 1.8
-            }
-          };
-        });
-
-        return res.status(200).json({
-          isSandbox: false,
-          runId,
-          status: runStatus,
-          items: items,
-          data: {
-            id: runId,
-            status: runStatus,
-            results: parsedResults
-          }
-        });
-      }
-    }
-
-    return res.status(200).json({
-      isSandbox: false,
-      runId,
-      status: runStatus,
-      raw: runData,
-      data: {
-        id: runId,
-        status: runStatus,
-        results: []
-      }
-    });
-
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
   }
 }

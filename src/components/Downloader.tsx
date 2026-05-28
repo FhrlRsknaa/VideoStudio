@@ -118,7 +118,7 @@ export default function Downloader() {
         setSelectedQuality(firstResult.sizeMB && firstResult.sizeMB['1080p'] ? '1080p' : '720p');
         
         if (resData.isSandbox) {
-          setErrorMsg('💡 INFO DEMO: Berhasil simulasi! Untuk menggunakan downloader asli, silahkan simpan token API Anda di bagian Environment Variables dashboard dengan nama APIFY_API_TOKEN.');
+          setErrorMsg('💡 INFO SIMULASI: Pengunduhan platform selain Instagram disimulasikan karena server telah difokuskan ke RapidAPI khusus Instagram. Masukkan link Instagram asli untuk mencoba pengunduhan real!');
         }
       } else {
         throw new Error('Tidak ada media yang ditemukan dari link tersebut. Pastikan link video valid dan publik.');
