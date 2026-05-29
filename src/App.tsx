@@ -26,13 +26,13 @@ export default function App() {
             <div className="w-full bg-white border-b border-blue-50/30 py-8 px-4 text-center">
               <div className="max-w-2xl mx-auto space-y-2">
                 <span className="px-3 py-1 bg-blue-50 text-[11px] font-bold text-blue-700 rounded-full tracking-wider uppercase">
-                  All-In-One Downloader
+                  Instagram Downloader
                 </span>
                 <h2 className="text-2xl font-extrabold text-[#1f1f1f] tracking-tight sm:text-3xl uppercase">
-                  ALL IN ONE MEDIA DOWNLOADER
+                  INSTAGRAM MEDIA DOWNLOADER
                 </h2>
                 <p className="text-sm text-gray-500 max-w-lg mx-auto leading-relaxed">
-                  Download video favoritmu secara instan dari Youtube, Tiktok, Instagram Reels, Twitter, maupun Direct Link murni langsung ke galeri gawai Anda.
+                  Download video, foto, reels, dan stories favoritmu secara instan dari Instagram langsung ke galeri gawai Anda.
                 </p>
               </div>
             </div>

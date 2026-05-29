@@ -116,10 +116,6 @@ export default function Downloader() {
         });
         
         setSelectedQuality(firstResult.sizeMB && firstResult.sizeMB['1080p'] ? '1080p' : '720p');
-        
-        if (resData.isSandbox) {
-          setErrorMsg('💡 INFO SIMULASI: Pengunduhan platform selain Instagram disimulasikan karena server telah difokuskan ke RapidAPI khusus Instagram. Masukkan link Instagram asli untuk mencoba pengunduhan real!');
-        }
       } else {
         throw new Error('Tidak ada media yang ditemukan dari link tersebut. Pastikan link video valid dan publik.');
       }
@@ -476,10 +472,10 @@ export default function Downloader() {
           Kelebihan All In One Media Downloader Kami
         </h4>
         <ul className="list-disc pl-5 text-xs text-[#444746] space-y-1.5 leading-relaxed font-semibold">
-          <li><strong>Mendukung Banyak Platform:</strong> Konversi file media instan dari YouTube, TikTok, Instagram Reels, Facebook, Twitter, dan file URL murni.</li>
+          <li><strong>Mendukung Instagram:</strong> Konversi file media instan dari Instagram Reels, Post, Video, Foto, maupun Instagram Stories secara langsung.</li>
           <li><strong>Tanpa Iklan Spam:</strong> Server lokal aman tanpa mengarahkan Anda ke situs-situs judi, pop up iklan palsu, maupun malware berbahaya.</li>
           <li><strong>Pilihan Ekstrak Audio (MP3):</strong> Hanya ingin lagunya saja? Cukup amankan track suaranya dengan mencentang pilihan Audio MP3.</li>
-          <li><strong>Mini Video Preview:</strong> Simulasikan & tonton video dalam panel mini sebelum memutuskan men-download-nya ke galeri.</li>
+          <li><strong>Mini Video Preview:</strong> Putar & tonton video dalam panel mini sebelum memutuskan men-download-nya ke galeri.</li>
         </ul>
       </div>
 
