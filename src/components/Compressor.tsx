@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, ChangeEvent, DragEvent } from 'react';
-import { Upload, Video, Download, CheckCircle2, AlertTriangle, Play, Pause, RefreshCw, Sliders, Info, ShieldAlert } from 'lucide-react';
+import { Upload, Video, Download, CheckCircle2, AlertTriangle, Play, Pause, RefreshCw, Sliders, Info, ShieldAlert, MessageCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { VideoMetadata } from '../types';
 
@@ -317,16 +317,20 @@ export default function Compressor() {
                 onChange={handleFileChange}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               />
-              <div className="w-16 h-16 rounded-full bg-[#d3e3fd] text-[#0b57d0] flex items-center justify-center mb-5 transition-transform duration-300 group-hover:scale-105">
-                <Upload className="w-8 h-8" />
+              <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mb-5 transition-transform duration-300 group-hover:scale-105 border border-emerald-100 relative shadow-sm">
+                <Upload className="w-7 h-7" />
+                <MessageCircle className="w-5 h-5 absolute -bottom-1 -right-1 text-emerald-500 fill-emerald-500 stroke-[#f8f9fa] group-hover:stroke-[#eff4f9] stroke-[2.5px]" />
               </div>
-              <h3 className="text-lg font-bold text-[#1f1f1f] mb-1">Upload video Anda</h3>
+              <h3 className="text-lg font-bold text-[#1f1f1f] mb-1">Upload video WhatsApp Anda</h3>
               <p className="text-sm text-[#444746] max-w-md mx-auto leading-relaxed">
-                Tarik & letakkan file video Anda di sini, atau klik untuk memilih dari komputer Anda.
+                Tarik & letakkan file video Anda di sini, atau klik untuk memilih file video Anda untuk dioptimalkan khusus Status WhatsApp HD.
               </p>
               <div className="mt-8 flex flex-wrap gap-3 justify-center">
+                <span className="px-3 py-1 bg-emerald-50 text-xs text-emerald-750 border border-emerald-200 font-bold rounded-full flex items-center gap-1">
+                  <MessageCircle className="w-3.5 h-3.5 fill-emerald-600 stroke-none" /> Status WhatsApp HD
+                </span>
                 <span className="px-3 py-1 bg-[#d3e3fd] text-xs text-[#0b57d0] font-bold rounded-full">MP4, WebM, MOV</span>
-                <span className="px-3 py-1 bg-[#d3e3fd] text-xs text-[#0b57d0] font-bold rounded-full">Resolusi Bebas</span>
+                <span className="px-3 py-1 bg-[#d3e3fd] text-xs text-[#0b57d0] font-bold rounded-full">Optimal 720p 30 FPS</span>
               </div>
             </div>
           </motion.div>
@@ -514,10 +518,10 @@ export default function Compressor() {
                           id="btn-download-compressed-v"
                           href={compressedBlobUrl}
                           download={`compressed_720p_${metadata?.name || 'video'}`}
-                          className="px-6 py-3 bg-[#0b57d0] hover:bg-[#0842a0] text-white rounded-full font-bold shadow-md shadow-blue-100 transition-all flex items-center justify-center gap-2 text-sm"
+                          className="px-6 py-3 bg-emerald-600 hover:bg-emerald-750 text-white rounded-full font-bold shadow-md shadow-emerald-100 transition-all flex items-center justify-center gap-2 text-sm"
                         >
-                          <Download className="w-4 h-4" />
-                          Download Video Kompresi
+                          <MessageCircle className="w-4 h-4 fill-white stroke-none" />
+                          Download Video Status WhatsApp
                         </a>
                         <button
                           id="btn-recompress"

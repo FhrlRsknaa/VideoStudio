@@ -1,4 +1,4 @@
-import { Video, Music, Sparkles, Download } from 'lucide-react';
+import { Video, Music, Sparkles, Download, MessageCircle } from 'lucide-react';
 
 interface HeaderProps {
   activeTab: 'downloader' | 'compress';
@@ -15,10 +15,14 @@ export default function Header({ activeTab, setActiveTab }: HeaderProps) {
             <Sparkles className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-[#0b57d0] tracking-tight">
+            <h1 className="text-xl font-bold text-[#0b57d0] tracking-tight flex items-center gap-1.5">
               VideoStudio
+              <span className="flex items-center gap-1 bg-emerald-50 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-200">
+                <MessageCircle className="w-3 h-3 fill-emerald-600 stroke-none" />
+                WhatsApp HD
+              </span>
             </h1>
-            <p className="text-xs text-[#747775] font-semibold">mengompress video agar pas untuk status whatsaap ( UJI PENGEMBANGAN )</p>
+            <p className="text-xs text-[#747775] font-semibold">mengompress video agar pas untuk status WhatsApp ( UJI PENGEMBANGAN )</p>
           </div>
         </div>
 
@@ -42,11 +46,14 @@ export default function Header({ activeTab, setActiveTab }: HeaderProps) {
             onClick={() => setActiveTab('compress')}
             className={`flex items-center gap-2 px-6 py-2.5 text-sm font-semibold rounded-full transition-all duration-300 ${
               activeTab === 'compress'
-                ? 'bg-[#0b57d0] text-white shadow-md shadow-blue-100'
+                ? 'bg-[#0c592a] text-white shadow-md shadow-emerald-100'
                 : 'text-[#444746] hover:text-[#0b57d0] hover:bg-[#d3e3fd]/40'
             }`}
           >
-            <Video className="w-4 h-4" />
+            <div className="relative flex items-center justify-center w-5 h-5 mr-0.5">
+              <Video className="w-4 h-4" />
+              <MessageCircle className="w-3 h-3 absolute -top-1 -right-1 text-emerald-500 fill-emerald-500 stroke-white stroke-[2px]" />
+            </div>
             Kompres Video
           </button>
         </nav>
