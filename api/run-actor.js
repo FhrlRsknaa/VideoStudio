@@ -145,121 +145,117 @@ export default async function handler(req, res) {
     }
 
     try {
-      const rapidApiUrl = `https://social-download-all-in-one.p.rapidapi.com/v1/social/all?url=${encodeURIComponent(link)}`;
+      const cleanUrl = link.split("?")[0];
+      const rapidApiUrl = `https://social-download-all-in-one.p.rapidapi.com/v1/social/autolink`;
       
       const response = await fetch(rapidApiUrl, {
-        method: 'GET',
+        method: 'POST',
         headers: {
-          'x-rapidapi-key': ALLINONE_API_KEY,
-          'x-rapidapi-host': 'social-download-all-in-one.p.rapidapi.com'
-        }
+          "Content-Type": "application/json",
+          "x-rapidapi-key": ALLINONE_API_KEY,
+          "x-rapidapi-host": "social-download-all-in-one.p.rapidapi.com"
+        },
+        body: JSON.stringify({
+          url: cleanUrl
+        })
       });
 
+      const rawText = await response.text();
       const platform = detectPlatform(link);
-      console.log("Platform:", platform);
-      console.log("URL:", link);
-      console.log("Provider:", "Social Download All In One");
-      console.log("Status:", response.status);
+      const provider = "Social Download All In One";
 
       if (!response.ok) {
-        console.error(`Social Download All In One API response status not ok: ${response.status}`);
+        let apiErrorMsg = "";
+        try {
+          const parsedErr = JSON.parse(rawText);
+          apiErrorMsg = parsedErr.message || parsedErr.error || parsedErr.msg || rawText;
+        } catch (e) {
+          apiErrorMsg = rawText;
+        }
+        apiErrorMsg = apiErrorMsg || `HTTP error ${response.status}`;
+
+        console.log("Platform:", platform);
+        console.log("Original URL:", link);
+        console.log("Clean URL:", cleanUrl);
+        console.log("Provider:", provider);
+        console.log("Status:", response.status);
+        console.log("Raw Response:", rawText);
+
         return res.status(200).json({
           success: false,
-          error: "Gagal mengambil media"
+          status: response.status,
+          error: apiErrorMsg,
+          raw: rawText
         });
       }
 
-      const data = await response.json();
-      console.log("Social Download All In One Response:", data);
+      let data = {};
+      try {
+        data = JSON.parse(rawText);
+      } catch (e) {
+        console.log("Platform:", platform);
+        console.log("Original URL:", link);
+        console.log("Clean URL:", cleanUrl);
+        console.log("Provider:", provider);
+        console.log("Status:", response.status);
+        console.log("Raw Response:", rawText);
 
-      // Parsing properties gracefully (empty string fallback for missing thumbnail / author)
-      const topTitle = data.title || data.description || data.desc || "Media File";
-      const topAuthor = data.author || data.creator || data.username || data.nickname || "";
-      const topThumbnail = data.picture || data.thumbnail || data.thumb || data.cover || data.image || "";
-      const topDuration = Number(data.duration) || 0;
-
-      // Extract original links
-      const rawLinks = data.links || data.medias || data.download || data.urls || (Array.isArray(data) ? data : []);
-
-      const mediasList = [];
-      if (Array.isArray(rawLinks)) {
-        for (const item of rawLinks) {
-          if (!item) continue;
-          const url = item.link || item.url || item.download || item.download_link || "";
-          if (!url) continue;
-
-          let type = item.type || "";
-          if (typeof type === 'string') {
-            type = type.toLowerCase();
-          }
-
-          let quality = item.quality || item.resolution || item.format || "";
-
-          mediasList.push({
-            url: url,
-            type: type,
-            quality: quality
-          });
-        }
+        return res.status(200).json({
+          success: false,
+          status: response.status,
+          error: "Response dari API bukan format JSON yang valid",
+          raw: rawText
+        });
       }
 
-      let videoUrl = "";
-      let musicUrl = "";
+      console.log("Platform:", platform);
+      console.log("Original URL:", link);
+      console.log("Clean URL:", cleanUrl);
+      console.log("Provider:", provider);
+      console.log("Status:", response.status);
+      console.log("Raw Response:", JSON.stringify(data, null, 2));
 
-      if (mediasList.length > 0) {
-        for (const med of mediasList) {
-          const typeLower = String(med.type).toLowerCase();
-          const urlLower = String(med.url).toLowerCase();
-          const qualityLower = String(med.quality).toLowerCase();
-
-          const isVideo = typeLower.includes('video') || urlLower.includes('.mp4') || (typeLower === "" && !typeLower.includes('audio') && !urlLower.includes('.mp3'));
-          const isAudio = typeLower.includes('audio') || typeLower.includes('music') || typeLower.includes('mp3') || urlLower.includes('.mp3') || urlLower.includes('.m4a') || qualityLower.includes('mp3');
-
-          if (isVideo && !videoUrl) {
-            videoUrl = med.url;
-          }
-          if (isAudio && !musicUrl) {
-            musicUrl = med.url;
-          }
-        }
+      if (data.success === false) {
+        return res.status(200).json({
+          success: false,
+          status: response.status,
+          error: data.message || data.error || data.msg || "API returned success false",
+          raw: rawText
+        });
       }
 
-      // Fill in from top level properties if empty
-      if (!videoUrl) {
-        videoUrl = data.video || data.videoUrl || data.video_url || data.play || data.hdplay || data.download || data.url || data.link || "";
-      }
-      if (!musicUrl) {
-        musicUrl = data.music || data.musicUrl || data.music_url || data.audio || data.audioUrl || data.audio_url || "";
-      }
+      // Normalisasi response
+      const medias = data.medias || [];
+      const videos = medias.filter(m => m && m.type === "video");
+      const audios = medias.filter(m => m && m.type === "audio");
 
-      // Robust fallback of assigning videoUrl to the first matched url if both remain empty
-      if (!videoUrl && !musicUrl && mediasList.length > 0) {
-        const first = mediasList[0];
-        const urlLower = String(first.url).toLowerCase();
-        if (urlLower.includes('.mp3') || urlLower.includes('.m4a') || String(first.type).toLowerCase().includes('audio')) {
-          musicUrl = first.url;
-        } else {
-          videoUrl = first.url;
-        }
-      }
+      const video = videos[0]?.url || videos[0]?.link || "";
+      const music = audios[0]?.url || audios[0]?.link || "";
 
+      const title = data.title || "";
+      const author = data.author || data.username || "";
+      const thumbnail = data.thumbnail || "";
+
+      // Semua provider harus mengembalikan format:
       return res.status(200).json({
         success: true,
         source: platform,
-        title: topTitle,
-        author: topAuthor,
-        thumbnail: topThumbnail,
-        duration: topDuration,
-        video: videoUrl,
-        music: musicUrl,
-        medias: rawLinks
+        title: title,
+        author: author,
+        thumbnail: thumbnail,
+        duration: data.duration || 0,
+        video: video,
+        music: music,
+        medias: medias
       });
 
     } catch (error) {
       console.error("Social Download All In One Exception:", error);
       return res.status(200).json({
         success: false,
-        error: "Gagal mengambil media"
+        status: 500,
+        error: `Internal Server Error: ${error.message || 'Error tidak dikenal'}`,
+        raw: error.stack || String(error)
       });
     }
   }
