@@ -26,13 +26,13 @@ export default function App() {
             <div className="w-full bg-white border-b border-blue-50/30 py-8 px-4 text-center">
               <div className="max-w-2xl mx-auto space-y-2">
                 <span className="px-3 py-1 bg-blue-50 text-[11px] font-bold text-blue-700 rounded-full tracking-wider uppercase">
-                  Instagram Downloader
+                  TikTok Downloader HD
                 </span>
                 <h2 className="text-2xl font-extrabold text-[#1f1f1f] tracking-tight sm:text-3xl uppercase">
-                  INSTAGRAM MEDIA DOWNLOADER
+                  TIKTOK VIDEO DOWNLOADER
                 </h2>
                 <p className="text-sm text-gray-500 max-w-lg mx-auto leading-relaxed">
-                  Download video, foto, reels, dan stories favoritmu secara instan dari Instagram langsung ke galeri gawai Anda.
+                  Download video TikTok tanpa watermark secara instan dengan kualitas HD langsung ke galeri gawai Anda.
                 </p>
               </div>
             </div>

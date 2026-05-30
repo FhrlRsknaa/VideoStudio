@@ -30,6 +30,7 @@ interface MockVideoMetadata {
   platform: 'youtube' | 'tiktok' | 'instagram' | 'twitter' | 'direct';
   thumbnailUrl: string;
   videoUrl: string;
+  musicUrl?: string;
   sizeMB: {
     '1080p'?: number;
     '720p': number;
@@ -64,6 +65,12 @@ export default function Downloader() {
       return;
     }
 
+    const isTikTok = targetUrl.toLowerCase().includes('tiktok.com');
+    if (!isTikTok) {
+      setErrorMsg('Hanya link video TikTok publik yang didukung saat ini.');
+      return;
+    }
+
     setIsAnalyzing(true);
     setErrorMsg(null);
     setVideoMetadata(null);
@@ -85,39 +92,24 @@ export default function Downloader() {
 
       const resData = await response.json();
       
-      if (resData.data && resData.data.results && resData.data.results.length > 0) {
-        const firstResult = resData.data.results[0];
-        
-        let detectedPlatform: 'youtube' | 'tiktok' | 'instagram' | 'twitter' | 'direct' = 'direct';
-        const urlLower = targetUrl.toLowerCase();
-        if (urlLower.includes('youtube.com') || urlLower.includes('youtu.be')) {
-          detectedPlatform = 'youtube';
-        } else if (urlLower.includes('tiktok.com')) {
-          detectedPlatform = 'tiktok';
-        } else if (urlLower.includes('instagram.com')) {
-          detectedPlatform = 'instagram';
-        } else if (urlLower.includes('twitter.com') || urlLower.includes('x.com')) {
-          detectedPlatform = 'twitter';
-        }
-
+      if (resData.success) {
         setVideoMetadata({
-          title: firstResult.title || 'Extracted Video Clip',
-          creator: firstResult.creator || 'Konten Kreator',
-          duration: Number(firstResult.duration) || 15,
-          platform: detectedPlatform,
-          thumbnailUrl: '',
-          videoUrl: firstResult.videoUrl,
-          sizeMB: firstResult.sizeMB || {
-            '1080p': 32.4,
-            '720p': 18.2,
-            '480p': 9.1,
-            'mp3': 2.4
+          title: resData.title || 'TikTok Video',
+          creator: resData.author || 'TikTok Creator',
+          duration: 15,
+          platform: 'tiktok',
+          thumbnailUrl: resData.thumbnail || '',
+          videoUrl: resData.video || '',
+          musicUrl: resData.music || '',
+          sizeMB: {
+            '720p': 14.8,
+            'mp3': 1.6
           }
         });
         
-        setSelectedQuality(firstResult.sizeMB && firstResult.sizeMB['1080p'] ? '1080p' : '720p');
+        setSelectedQuality('720p');
       } else {
-        throw new Error('Tidak ada media yang ditemukan dari link tersebut. Pastikan link video valid dan publik.');
+        throw new Error(resData.error || 'Gagal memperoleh data video dari server.');
       }
     } catch (err: any) {
       console.error(err);
@@ -151,7 +143,7 @@ export default function Downloader() {
 
     try {
       // Direct stream download tracker
-      const targetUrl = videoMetadata.videoUrl;
+      const targetUrl = selectedQuality === 'mp3' && videoMetadata.musicUrl ? videoMetadata.musicUrl : videoMetadata.videoUrl;
       const response = await fetch(targetUrl, {
         referrerPolicy: 'no-referrer'
       });
@@ -279,7 +271,7 @@ export default function Downloader() {
                 type="text"
                 value={urlInput}
                 onChange={(e) => setUrlInput(e.target.value)}
-                placeholder="YouTube, TikTok, Instagram Reels, Twitter, atau Link Direct MP4..."
+                placeholder="Masukkan link video TikTok publik Anda..."
                 className="w-full pl-11 pr-24 py-4 bg-[#f8f9fa] border border-[#c2c7cf] hover:border-[#0b57d0] focus:border-[#0b57d0] focus:ring-1 focus:ring-[#0b57d0] rounded-2xl text-sm font-medium text-[#1f1f1f] placeholder:text-[#747775] transition-all outline-none"
                 onKeyDown={(e) => e.key === 'Enter' && handleAnalyze()}
               />
@@ -499,13 +491,13 @@ export default function Downloader() {
       <div className="bg-[#eff4f9] rounded-3xl p-6 border border-[#dee1e5]">
         <h4 className="text-sm font-bold text-[#0b57d0] flex items-center gap-1.5 mb-2">
           <Info className="w-4.5 h-4.5" />
-          Kelebihan All In One Media Downloader Kami
+          Kelebihan TikTok Video Downloader Kami
         </h4>
         <ul className="list-disc pl-5 text-xs text-[#444746] space-y-1.5 leading-relaxed font-semibold">
-          <li><strong>Mendukung Instagram:</strong> Konversi file media instan dari Instagram Reels, Post, Video, Foto, maupun Instagram Stories secara langsung.</li>
-          <li><strong>Tanpa Iklan Spam:</strong> Server lokal aman tanpa mengarahkan Anda ke situs-situs judi, pop up iklan palsu, maupun malware berbahaya.</li>
-          <li><strong>Pilihan Ekstrak Audio (MP3):</strong> Hanya ingin lagunya saja? Cukup amankan track suaranya dengan mencentang pilihan Audio MP3.</li>
-          <li><strong>Mini Video Preview:</strong> Putar & tonton video dalam panel mini sebelum memutuskan men-download-nya ke galeri.</li>
+          <li><strong>Tanpa Watermark:</strong> Ekstraksi file video murni tanpa logo TikTok yang mengganggu secara otomatis.</li>
+          <li><strong>Tanpa Iklan Spam:</strong> Server aman dan andal tanpa ada pop-up iklan, judi online, maupun pengalihan browser yang bersisiko.</li>
+          <li><strong>Pilihan Ekstrak Audio (MP3):</strong> Unduh trek audio MP3 dari video TikTok secara terpisah dengan kualitas tinggi.</li>
+          <li><strong>Pratinjau Langsung:</strong> Putar video di pemutar mini berkinerja tinggi sebelum mengunduh untuk memastikan video sudah benar.</li>
         </ul>
       </div>
 
