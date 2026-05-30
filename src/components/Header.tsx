@@ -34,7 +34,7 @@ export default function Header({ activeTab, setActiveTab }: HeaderProps) {
             }`}
           >
             <Download className="w-4 h-4" />
-            Media Downloader
+            Tiktok Downloader
           </button>
 
           <button
