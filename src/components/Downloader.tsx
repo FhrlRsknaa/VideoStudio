@@ -29,14 +29,10 @@ interface MockVideoMetadata {
   duration: number;
   platform: 'youtube' | 'tiktok' | 'instagram' | 'twitter' | 'direct';
   thumbnailUrl: string;
-  videoUrl: string;
-  musicUrl?: string;
-  sizeMB: {
-    '1080p'?: number;
-    '720p': number;
-    '480p'?: number;
-    'mp3': number;
-  };
+  videoUrl: string;       // Standard play URL
+  hdVideoUrl: string;     // hdplay URL
+  wmVideoUrl?: string;    // wmplay URL
+  musicUrl?: string;      // Audio MP3 URL
 }
 
 export default function Downloader() {
@@ -46,7 +42,7 @@ export default function Downloader() {
   
   // Selected video and resolution states
   const [videoMetadata, setVideoMetadata] = useState<MockVideoMetadata | null>(null);
-  const [selectedQuality, setSelectedQuality] = useState<'1080p' | '720p' | '480p' | 'mp3'>('720p');
+  const [selectedFormat, setSelectedFormat] = useState<'hd' | 'standard' | 'watermark' | 'mp3'>('hd');
   
   // Processing states
   const [isDownloading, setIsDownloading] = useState(false);
@@ -100,14 +96,12 @@ export default function Downloader() {
           platform: 'tiktok',
           thumbnailUrl: resData.thumbnail || '',
           videoUrl: resData.video || '',
-          musicUrl: resData.music || '',
-          sizeMB: {
-            '720p': 14.8,
-            'mp3': 1.6
-          }
+          hdVideoUrl: resData.hdVideo || resData.video || '',
+          wmVideoUrl: resData.wmVideo || '',
+          musicUrl: resData.music || ''
         });
         
-        setSelectedQuality('720p');
+        setSelectedFormat('hd');
       } else {
         throw new Error(resData.error || 'Gagal memperoleh data video dari server.');
       }
@@ -137,13 +131,29 @@ export default function Downloader() {
     setDownloadFinished(false);
     setDownloadStep('Menghubungkan ke server media asli...');
 
-    const fileExt = selectedQuality === 'mp3' ? 'mp3' : 'mp4';
+    const fileExt = selectedFormat === 'mp3' ? 'mp3' : 'mp4';
     const cleanTitle = videoMetadata.title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-    const filename = `downloader_${videoMetadata.platform}_${cleanTitle}.${fileExt}`;
+    const filename = `downloader_tiktok_${cleanTitle}.${fileExt}`;
+
+    let targetUrl = '';
+    if (selectedFormat === 'hd') {
+      targetUrl = videoMetadata.hdVideoUrl;
+    } else if (selectedFormat === 'standard') {
+      targetUrl = videoMetadata.videoUrl;
+    } else if (selectedFormat === 'watermark') {
+      targetUrl = videoMetadata.wmVideoUrl || videoMetadata.videoUrl;
+    } else if (selectedFormat === 'mp3') {
+      targetUrl = videoMetadata.musicUrl || '';
+    }
+
+    if (!targetUrl) {
+      setIsDownloading(false);
+      setErrorMsg('Format video tidak tersedia.');
+      return;
+    }
 
     try {
       // Direct stream download tracker
-      const targetUrl = selectedQuality === 'mp3' && videoMetadata.musicUrl ? videoMetadata.musicUrl : videoMetadata.videoUrl;
       const response = await fetch(targetUrl, {
         referrerPolicy: 'no-referrer'
       });
@@ -180,7 +190,7 @@ export default function Downloader() {
         setDownloadStep(`Mengunduh file: ${percent}% (${(receivedBytes / (1024 * 1024)).toFixed(1)} MB / ${(totalBytes / (1024 * 1024)).toFixed(1)} MB)`);
       }
 
-      const finalBlob = new Blob(chunks, { type: selectedQuality === 'mp3' ? 'audio/mp3' : 'video/mp4' });
+      const finalBlob = new Blob(chunks, { type: selectedFormat === 'mp3' ? 'audio/mp3' : 'video/mp4' });
       triggerBlobDownload(finalBlob, filename);
 
     } catch (err) {
@@ -190,7 +200,7 @@ export default function Downloader() {
       setDownloadStep('Menyelesaikan kaitan file media...');
       
       const link = document.createElement('a');
-      link.href = videoMetadata.videoUrl;
+      link.href = targetUrl;
       link.target = '_blank';
       link.referrerPolicy = 'no-referrer';
       link.download = filename;
@@ -392,45 +402,79 @@ export default function Downloader() {
                   </span>
                   
                   <div className="space-y-2">
-                    {/* Quality option loops */}
-                    {(Object.keys(videoMetadata.sizeMB) as Array<keyof typeof videoMetadata.sizeMB>).map((quality) => {
-                      const size = videoMetadata.sizeMB[quality];
-                      if (size === undefined) return null;
+                    {[
+                      {
+                        key: 'hd',
+                        title: 'Ultra HD / HD',
+                        subtitle: 'Video kualitas jernih maksimal',
+                        size: '26.8 MB',
+                        label: 'Terbaik',
+                        labelBg: 'bg-indigo-50 border-indigo-200 text-indigo-700',
+                        isAudio: false,
+                        available: !0,
+                      },
+                      {
+                        key: 'standard',
+                        title: 'Video Normal',
+                        subtitle: 'Video standar, hemat kuota data',
+                        size: '14.8 MB',
+                        label: 'Standard',
+                        labelBg: 'bg-emerald-50 border-emerald-200 text-emerald-700',
+                        isAudio: false,
+                        available: !0,
+                      },
+                      {
+                        key: 'mp3',
+                        title: 'Audio MP3',
+                        subtitle: 'Ekstrak file lagu atau latar suara dengan kualitas tinggi',
+                        size: '1.6 MB',
+                        label: 'Audio',
+                        labelBg: 'bg-amber-50 border-amber-200 text-amber-700',
+                        isAudio: true,
+                        available: !!videoMetadata.musicUrl,
+                      },
+                    ].map((format) => {
+                      if (!format.available) return null;
 
-                      const isSelected = selectedQuality === quality;
-                      const isMp3 = quality === 'mp3';
-                      const qualityStr = String(quality);
+                      const isSelected = selectedFormat === format.key;
 
                       return (
                         <button
-                          key={qualityStr}
-                          id={`downloader-quality-${qualityStr}`}
-                          onClick={() => setSelectedQuality(quality as any)}
-                          className={`w-full flex items-center justify-between p-3.5 rounded-2xl border transition-all cursor-pointer ${
+                          key={format.key}
+                          id={`downloader-format-${format.key}`}
+                          onClick={() => setSelectedFormat(format.key as any)}
+                          className={`w-full flex items-center justify-between p-3 flex-row gap-3 rounded-2xl border text-left transition-all cursor-pointer ${
                             isSelected 
                               ? 'bg-[#f0f4f9] border-[#0b57d0] text-[#0b57d0] font-bold' 
-                              : 'bg-white border-[#dee1e5] hover:bg-[#f8f9fa] text-[#444746]'
+                              : 'bg-white border-[#dee1e5] hover:bg-slate-50 text-slate-700'
                           }`}
                         >
                           <div className="flex items-center gap-3">
-                            <div className={`p-2 rounded-lg ${isSelected ? 'bg-[#0b57d0] text-white' : 'bg-slate-100 text-[#444746]'}`}>
-                              {isMp3 ? <Music className="w-4 h-4" /> : <Video className="w-4 h-4" />}
+                            <div className={`p-2 rounded-xl transition-all ${
+                              isSelected ? 'bg-[#0b57d0] text-white shadow-sm' : 'bg-slate-100 text-[#444746]'
+                            }`}>
+                              {format.isAudio ? <Music className="w-5 h-5" /> : <Video className="w-5 h-5" />}
                             </div>
-                            <div className="text-left">
-                              <p className="text-sm font-bold uppercase tracking-tight">
-                                {isMp3 ? 'Audio MP3' : `Format MP4 Video`}
-                              </p>
-                              <p className="text-[10px] text-[#747775] font-medium">
-                                {isMp3 ? 'Mengekstrak file suara saja • Kompresi Tinggi' : `${qualityStr} Resolusi HD`}
+                            <div className="leading-tight">
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                <p className={`text-sm font-bold tracking-tight ${isSelected ? 'text-[#0b57d0]' : 'text-slate-800'}`}>
+                                  {format.title}
+                                </p>
+                                <span className={`text-[9px] px-1.5 py-0.5 rounded-md font-extrabold uppercase border ${format.labelBg}`}>
+                                  {format.label}
+                                </span>
+                              </div>
+                              <p className="text-[10px] text-slate-500 font-medium mt-0.5">
+                                {format.subtitle}
                               </p>
                             </div>
                           </div>
                           
-                          <div className="text-right">
+                          <div className="text-right flex-shrink-0">
                             <span className={`text-xs px-2.5 py-1.5 rounded-full font-bold ${
-                              isSelected ? 'bg-[#0b57d0] text-white' : 'bg-slate-100 text-[#1f1f1f]'
+                              isSelected ? 'bg-[#0b57d0] text-white' : 'bg-slate-150 text-slate-800'
                             }`}>
-                              ~ {size.toFixed(1)} MB
+                              ~ {format.size}
                             </span>
                           </div>
                         </button>
@@ -477,7 +521,13 @@ export default function Downloader() {
                     className="w-full py-4 bg-[#0b57d0] hover:bg-[#0842a0] text-white rounded-full font-bold text-sm shadow-md shadow-blue-100 transition-all flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <Download className="w-5 h-5 animate-bounce" />
-                    <span>Mulai Download ({selectedQuality === 'mp3' ? 'MP3 Audio' : `MP4 ${selectedQuality}`})</span>
+                    <span>
+                      Mulai Download ({
+                        selectedFormat === 'hd' ? 'HD Tanpa Watermark' :
+                        selectedFormat === 'standard' ? 'Video Standar' :
+                        selectedFormat === 'watermark' ? 'Video Watermark' : 'MP3 Audio'
+                      })
+                    </span>
                   </button>
                 )}
               </div>

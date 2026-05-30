@@ -88,6 +88,8 @@ async function startServer() {
         title: target.title || "TikTok Video",
         author: authorNickname,
         video: target.play || target.wmplay || "",
+        hdVideo: target.hdplay || target.play || "",
+        wmVideo: target.wmplay || "",
         music: target.music || "",
         thumbnail: target.cover || target.origin_cover || ""
       });
