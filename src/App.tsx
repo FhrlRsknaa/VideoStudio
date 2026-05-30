@@ -7,7 +7,7 @@ import { useState } from 'react';
 import Header from './components/Header';
 import Compressor from './components/Compressor';
 import Downloader from './components/Downloader';
-import { Info, MessageCircle } from 'lucide-react';
+import { Info } from 'lucide-react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<'downloader' | 'compress'>('downloader');
@@ -73,21 +73,10 @@ export default function App() {
           </div>
         </div>
 
-        {/* Developer Info Badge with clean rounded border and WhatsApp redirect */}
-        <a 
-          href="https://wa.me/6285186814906"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-2.5 border border-emerald-400 rounded-full px-5 py-2 text-xs text-emerald-800 font-semibold bg-emerald-50 hover:bg-emerald-100/70 transition-all duration-300 shadow-sm hover:shadow active:scale-95 cursor-pointer group"
-        >
-          <div className="w-6 h-6 rounded-full bg-[#25D366] flex items-center justify-center shadow-sm">
-            <MessageCircle className="w-3.5 h-3.5 text-white fill-white stroke-[#25D366] stroke-[0.5px]" />
-          </div>
-          <div className="flex flex-col items-start leading-tight">
-            <span className="text-[9px] text-[#128C7E] font-bold uppercase tracking-wider group-hover:text-emerald-700">Ada saran? Call Me</span>
-            <span className="text-emerald-900 font-extrabold text-[11px] group-hover:text-emerald-950">Developer By Fahrul</span>
-          </div>
-        </a>
+        {/* Developer Info Badge with clean rounded border */}
+        <div className="border border-[#dee1e5] rounded-full px-5 py-1.5 text-xs text-[#0b57d0] font-semibold bg-[#f0f4f9] hover:bg-[#d3e3fd]/40 transition-colors">
+          Developer By Fahrul
+        </div>
       </footer>
     </div>
   );

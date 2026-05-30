@@ -17,8 +17,12 @@ export default function Header({ activeTab, setActiveTab }: HeaderProps) {
           <div>
             <h1 className="text-xl font-bold text-[#0b57d0] tracking-tight flex items-center gap-1.5">
               VideoStudio
+              <span className="flex items-center gap-1 bg-emerald-50 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-200">
+                <MessageCircle className="w-3 h-3 fill-emerald-600 stroke-none" />
+                WhatsApp HD
+              </span>
             </h1>
-            <p className="text-xs text-[#747775] font-semibold">( UJI PENGEMBANGAN )</p>
+            <p className="text-xs text-[#747775] font-semibold">mengompress video agar pas untuk status WhatsApp ( UJI PENGEMBANGAN )</p>
           </div>
         </div>
 
@@ -34,7 +38,7 @@ export default function Header({ activeTab, setActiveTab }: HeaderProps) {
             }`}
           >
             <Download className="w-4 h-4" />
-            Tiktok Downloader
+            Media Downloader
           </button>
 
           <button
@@ -50,7 +54,7 @@ export default function Header({ activeTab, setActiveTab }: HeaderProps) {
               <Video className="w-4 h-4" />
               <MessageCircle className="w-3 h-3 absolute -top-1 -right-1 text-emerald-500 fill-emerald-500 stroke-white stroke-[2px]" />
             </div>
-            WhatsApp HD
+            Kompres Video
           </button>
         </nav>
       </div>
