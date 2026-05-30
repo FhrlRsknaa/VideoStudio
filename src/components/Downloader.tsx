@@ -487,19 +487,7 @@ export default function Downloader() {
         )}
       </AnimatePresence>
 
-      {/* Helpful Instructions box */}
-      <div className="bg-[#eff4f9] rounded-3xl p-6 border border-[#dee1e5]">
-        <h4 className="text-sm font-bold text-[#0b57d0] flex items-center gap-1.5 mb-2">
-          <Info className="w-4.5 h-4.5" />
-          Kelebihan TikTok Video Downloader Kami
-        </h4>
-        <ul className="list-disc pl-5 text-xs text-[#444746] space-y-1.5 leading-relaxed font-semibold">
-          <li><strong>Tanpa Watermark:</strong> Ekstraksi file video murni tanpa logo TikTok yang mengganggu secara otomatis.</li>
-          <li><strong>Tanpa Iklan Spam:</strong> Server aman dan andal tanpa ada pop-up iklan, judi online, maupun pengalihan browser yang bersisiko.</li>
-          <li><strong>Pilihan Ekstrak Audio (MP3):</strong> Unduh trek audio MP3 dari video TikTok secara terpisah dengan kualitas tinggi.</li>
-          <li><strong>Pratinjau Langsung:</strong> Putar video di pemutar mini berkinerja tinggi sebelum mengunduh untuk memastikan video sudah benar.</li>
-        </ul>
-      </div>
+
 
     </div>
   );
