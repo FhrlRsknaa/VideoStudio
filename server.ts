@@ -55,6 +55,33 @@ function extractMediaFromRapidAPIResponse(resData: any, originalLink: string) {
   };
 }
 
+function extractMediaFromTikTokResponse(resData: any, originalLink: string) {
+  const target = resData.data || {};
+  const resolvedVideo = target.play || target.wmplay || originalLink;
+  const resolvedTitle = target.title || "TikTok Video Extracted";
+  const resolvedCreator = target.author?.nickname || target.author?.unique_id || "TikTok Creator";
+  const resolvedDuration = Number(target.duration) || 15;
+  const sizeBytes = Number(target.size) || 15000000;
+  const musicSizeBytes = Number(target.music_size) || 1500000;
+  
+  const sizeMB = sizeBytes / (1024 * 1024);
+  const musicSizeMB = musicSizeBytes / (1024 * 1024);
+
+  return {
+    title: resolvedTitle,
+    creator: resolvedCreator,
+    duration: resolvedDuration,
+    videoUrl: resolvedVideo,
+    originalUrl: originalLink,
+    sizeMB: {
+      "1080p": Number((sizeMB * 1.25).toFixed(1)) || 25.4,
+      "720p": Number(sizeMB.toFixed(1)) || 14.8,
+      "480p": Number((sizeMB * 0.55).toFixed(1)) || 7.1,
+      "mp3": Number(musicSizeMB.toFixed(1)) || 1.6
+    }
+  };
+}
+
 async function startServer() {
   const app = express();
   const PORT = 3000;
@@ -62,7 +89,7 @@ async function startServer() {
   // Middleware to parse JSON bodies
   app.use(express.json());
 
-  // API endpoint for running RapidAPI Instagram Downloader
+  // API endpoint for running RapidAPI Downloader
   app.post("/api/run-actor", async (req, res) => {
     const { link } = req.body;
     
@@ -71,54 +98,92 @@ async function startServer() {
     }
 
     const isInstagram = link.toLowerCase().includes('instagram.com');
+    const isTikTok = link.toLowerCase().includes('tiktok.com');
     const RAPIDAPI_KEY = process.env.RAPIDAPI_KEY || '5460a7ce88mshcf8572571633e80p1babd6jsn7432c5204cbf';
 
-    if (!isInstagram) {
-      return res.status(400).json({ error: "Hanya link Instagram publik yang didukung saat ini." });
+    if (!isInstagram && !isTikTok) {
+      return res.status(400).json({ error: "Hanya link Instagram & TikTok publik yang didukung saat ini." });
     }
 
     if (!RAPIDAPI_KEY) {
       return res.status(400).json({ 
-        error: "API Key (RAPIDAPI_KEY) belum dikonfigurasi di Environment Variables Vercel atau server lokal Anda." 
+        error: "API Key (RAPIDAPI_KEY) belum dikonfigurasi di server." 
       });
     }
 
     try {
-      console.log(`Mencoba mengunduh Instagram link via RapidAPI...`);
-      
-      const rapidApiUrl = `https://instagram-downloader-download-instagram-videos-stories1.p.rapidapi.com/download?url=${encodeURIComponent(link)}`;
-      
-      const rapidApiResponse = await fetch(rapidApiUrl, {
-        method: 'GET',
-        headers: {
-          'x-rapidapi-key': RAPIDAPI_KEY,
-          'x-rapidapi-host': 'instagram-downloader-download-instagram-videos-stories1.p.rapidapi.com'
-        }
-      });
-      
-      if (rapidApiResponse.ok) {
-        const resData = await rapidApiResponse.json();
-        console.log(`RapidAPI Response:`, resData);
-        const parsedResult = extractMediaFromRapidAPIResponse(resData, link);
+      if (isTikTok) {
+        console.log(`Mencoba mengunduh TikTok link via RapidAPI...`);
+        const rapidApiUrl = `https://tiktok-video-no-watermark2.p.rapidapi.com/?url=${encodeURIComponent(link)}&hd=1`;
         
-        return res.json({
-          isSandbox: false,
-          provider: 'rapidapi',
-          status: 'SUCCEEDED',
-          data: {
-            id: `rapidapi_${Date.now()}`,
-            status: 'SUCCEEDED',
-            results: [parsedResult]
+        const rapidApiResponse = await fetch(rapidApiUrl, {
+          method: 'GET',
+          headers: {
+            'x-rapidapi-key': RAPIDAPI_KEY,
+            'x-rapidapi-host': 'tiktok-video-no-watermark2.p.rapidapi.com'
           }
         });
+        
+        if (rapidApiResponse.ok) {
+          const resData = await rapidApiResponse.json();
+          console.log(`TikTok RapidAPI Response Code:`, resData.code);
+          
+          if (resData.code !== 0 || !resData.data) {
+            throw new Error(resData.msg || "Gagal memperoleh data video TikTok dari API");
+          }
+
+          const parsedResult = extractMediaFromTikTokResponse(resData, link);
+          
+          return res.json({
+            isSandbox: false,
+            provider: 'rapidapi',
+            status: 'SUCCEEDED',
+            data: {
+              id: `rapidapi_tiktok_${Date.now()}`,
+              status: 'SUCCEEDED',
+              results: [parsedResult]
+            }
+          });
+        } else {
+          const errorText = await rapidApiResponse.text();
+          throw new Error(`RapidAPI responded with status ${rapidApiResponse.status}: ${errorText}`);
+        }
       } else {
-        const errorText = await rapidApiResponse.text();
-        throw new Error(`RapidAPI responded with status ${rapidApiResponse.status}: ${errorText}`);
+        console.log(`Mencoba mengunduh Instagram link via RapidAPI...`);
+        const rapidApiUrl = `https://instagram-downloader-download-instagram-videos-stories1.p.rapidapi.com/download?url=${encodeURIComponent(link)}`;
+        
+        const rapidApiResponse = await fetch(rapidApiUrl, {
+          method: 'GET',
+          headers: {
+            'x-rapidapi-key': RAPIDAPI_KEY,
+            'x-rapidapi-host': 'instagram-downloader-download-instagram-videos-stories1.p.rapidapi.com'
+          }
+        });
+        
+        if (rapidApiResponse.ok) {
+          const resData = await rapidApiResponse.json();
+          console.log(`RapidAPI Instagram Response:`, resData);
+          const parsedResult = extractMediaFromRapidAPIResponse(resData, link);
+          
+          return res.json({
+            isSandbox: false,
+            provider: 'rapidapi',
+            status: 'SUCCEEDED',
+            data: {
+              id: `rapidapi_instagram_${Date.now()}`,
+              status: 'SUCCEEDED',
+              results: [parsedResult]
+            }
+          });
+        } else {
+          const errorText = await rapidApiResponse.text();
+          throw new Error(`RapidAPI responded with status ${rapidApiResponse.status}: ${errorText}`);
+        }
       }
     } catch (rapidErr: any) {
       console.error(`Error saat memanggil RapidAPI:`, rapidErr);
       return res.status(520).json({ 
-        error: `Gagal mengambil data dari Instagram via RapidAPI: ${rapidErr.message || 'Error tidak dikenal'}` 
+        error: `Gagal mengambil data via RapidAPI: ${rapidErr.message || 'Error tidak dikenal'}` 
       });
     }
   });

@@ -317,9 +317,16 @@ export default function Compressor() {
                 onChange={handleFileChange}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               />
-              <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mb-5 transition-transform duration-300 group-hover:scale-105 border border-emerald-100 relative shadow-sm">
-                <Upload className="w-7 h-7" />
-                <MessageCircle className="w-5 h-5 absolute -bottom-1 -right-1 text-emerald-500 fill-emerald-500 stroke-[#f8f9fa] group-hover:stroke-[#eff4f9] stroke-[2.5px]" />
+              <div className="flex items-center gap-3 mb-5 transition-transform duration-300 group-hover:scale-[1.02]">
+                <div className="w-14 h-14 rounded-full bg-[#25D366] flex items-center justify-center shadow-lg border border-emerald-400 relative">
+                  <MessageCircle className="w-8 h-8 text-white fill-white stroke-[#25D366] stroke-[0.5px]" />
+                  <div className="absolute -bottom-1 -right-1 bg-emerald-600 text-white rounded-full p-1 border border-white">
+                    <CheckCircle2 className="w-3 h-3 fill-white stroke-emerald-600 stroke-[2px]" />
+                  </div>
+                </div>
+                <div className="w-12 h-12 rounded-full bg-[#e8f0fe] text-[#0b57d0] flex items-center justify-center border border-blue-100">
+                  <Upload className="w-5 h-5" style={{ animation: 'bounce 2s infinite' }} />
+                </div>
               </div>
               <h3 className="text-lg font-bold text-[#1f1f1f] mb-1">Upload video WhatsApp Anda</h3>
               <p className="text-sm text-[#444746] max-w-md mx-auto leading-relaxed">

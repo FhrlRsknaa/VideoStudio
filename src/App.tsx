@@ -66,7 +66,7 @@ export default function App() {
         <div className="w-full max-w-5xl flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400 font-medium">
           <div className="flex items-center gap-2">
             <Info className="w-4 h-4 text-[#0b57d0]" />
-            <span>Semua pemrosesan media terjadi secara 100% lokal di browser Anda.</span>
+            <span>web ini dalam pengembangan jadi maklumin ya kalo masih bug/gagal.</span>
           </div>
           <div>
             <span>© 2026 Video Studio By Fahrul</span>

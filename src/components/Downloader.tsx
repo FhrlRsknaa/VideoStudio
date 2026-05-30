@@ -138,59 +138,89 @@ export default function Downloader() {
     }
   };
 
-  const triggerDownloadProgress = () => {
+  const triggerDownloadProgress = async () => {
     if (!videoMetadata) return;
     setIsDownloading(true);
     setDownloadProgress(0);
     setDownloadFinished(false);
+    setDownloadStep('Menghubungkan ke server media asli...');
 
-    const steps = [
-      'Menghubungkan ke CDN server media...',
-      'Mengekstrak track stream video HD...',
-      'Merender file visual ke wadah optimal...',
-      'Melakukan penyatuan audio stereo...',
-      'Menyiapkan data file untuk transmisi download...'
-    ];
-
-    let currentStepIdx = 0;
-    setDownloadStep(steps[0]);
-
-    const interval = setInterval(() => {
-      setDownloadProgress(prev => {
-        const next = prev + Math.floor(Math.random() * 8) + 3;
-        
-        // Progress steps boundary
-        if (next >= 20 && next < 40) setDownloadStep(steps[1]);
-        else if (next >= 40 && next < 60) setDownloadStep(steps[2]);
-        else if (next >= 60 && next < 80) setDownloadStep(steps[3]);
-        else if (next >= 80) setDownloadStep(steps[4]);
-
-        if (next >= 100) {
-          clearInterval(interval);
-          finishDownloadFile();
-          return 100;
-        }
-        return next;
-      });
-    }, 150);
-  };
-
-  const finishDownloadFile = () => {
-    if (!videoMetadata) return;
-
-    // Trigger real browser file downloading using a clean anchor elements
-    const link = document.createElement('a');
-    link.href = videoMetadata.videoUrl;
-    link.referrerPolicy = 'no-referrer';
-    
-    // Custom formatted download names
     const fileExt = selectedQuality === 'mp3' ? 'mp3' : 'mp4';
     const cleanTitle = videoMetadata.title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-    link.download = `downloader_${videoMetadata.platform}_${cleanTitle}.${fileExt}`;
-    
+    const filename = `downloader_${videoMetadata.platform}_${cleanTitle}.${fileExt}`;
+
+    try {
+      // Direct stream download tracker
+      const targetUrl = videoMetadata.videoUrl;
+      const response = await fetch(targetUrl, {
+        referrerPolicy: 'no-referrer'
+      });
+
+      if (!response.ok) {
+        throw new Error(`Koneksi langsung ditolak (Status ${response.status})`);
+      }
+
+      const contentLength = response.headers.get('content-length');
+      const totalBytes = contentLength ? parseInt(contentLength, 10) : 0;
+
+      if (!response.body || totalBytes === 0) {
+        // Instant non-simulated down flow
+        setDownloadProgress(100);
+        setDownloadStep('Mengunduh instan...');
+        const blob = await response.blob();
+        triggerBlobDownload(blob, filename);
+        return;
+      }
+
+      const reader = response.body.getReader();
+      let receivedBytes = 0;
+      const chunks = [];
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        chunks.push(value);
+        receivedBytes += value.length;
+
+        const percent = Math.min(Math.round((receivedBytes / totalBytes) * 100), 100);
+        setDownloadProgress(percent);
+        setDownloadStep(`Mengunduh file: ${percent}% (${(receivedBytes / (1024 * 1024)).toFixed(1)} MB / ${(totalBytes / (1024 * 1024)).toFixed(1)} MB)`);
+      }
+
+      const finalBlob = new Blob(chunks, { type: selectedQuality === 'mp3' ? 'audio/mp3' : 'video/mp4' });
+      triggerBlobDownload(finalBlob, filename);
+
+    } catch (err) {
+      console.warn('Real content streaming blocked due to CORS background locks. Using standard browser helper window.', err);
+      // Perfect bulletproof fall back path that triggers immediately without simulation
+      setDownloadProgress(100);
+      setDownloadStep('Menyelesaikan kaitan file media...');
+      
+      const link = document.createElement('a');
+      link.href = videoMetadata.videoUrl;
+      link.target = '_blank';
+      link.referrerPolicy = 'no-referrer';
+      link.download = filename;
+      
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      setIsDownloading(false);
+      setDownloadFinished(true);
+    }
+  };
+
+  const triggerBlobDownload = (blob: Blob, filename: string) => {
+    const downloadUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = filename;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(downloadUrl);
 
     setIsDownloading(false);
     setDownloadFinished(true);
