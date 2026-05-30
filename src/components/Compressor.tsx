@@ -308,7 +308,7 @@ export default function Compressor() {
             <div
               onDragOver={handleDragOver}
               onDrop={handleDrop}
-              className="border-2 border-dashed border-[#c2c7cf] rounded-[32px] p-10 sm:p-14 text-center cursor-pointer transition-all duration-300 bg-[#f8f9fa] hover:bg-[#eff4f9] flex flex-col items-center group relative overflow-hidden"
+              className="border-2 border-dashed border-[#c2c7cf] dark:border-slate-700 rounded-[32px] p-10 sm:p-14 text-center cursor-pointer transition-all duration-300 bg-[#f8f9fa] dark:bg-slate-900 hover:bg-[#eff4f9] dark:hover:bg-slate-800/40 flex flex-col items-center group relative overflow-hidden"
             >
               <input
                 id="video-upload-input"
@@ -324,20 +324,20 @@ export default function Compressor() {
                     <CheckCircle2 className="w-3 h-3 fill-white stroke-emerald-600 stroke-[2px]" />
                   </div>
                 </div>
-                <div className="w-12 h-12 rounded-full bg-[#e8f0fe] text-[#0b57d0] flex items-center justify-center border border-blue-100">
+                <div className="w-12 h-12 rounded-full bg-[#e8f0fe] dark:bg-blue-950/40 text-[#0b57d0] dark:text-blue-400 flex items-center justify-center border border-blue-100 dark:border-slate-800">
                   <Upload className="w-5 h-5" style={{ animation: 'bounce 2s infinite' }} />
                 </div>
               </div>
-              <h3 className="text-lg font-bold text-[#1f1f1f] mb-1">Upload video WhatsApp Anda</h3>
-              <p className="text-sm text-[#444746] max-w-md mx-auto leading-relaxed">
+              <h3 className="text-lg font-bold text-[#1f1f1f] dark:text-slate-100 mb-1 transition-colors duration-500">Upload video WhatsApp Anda</h3>
+              <p className="text-sm text-[#444746] dark:text-slate-400 max-w-md mx-auto leading-relaxed transition-colors duration-500">
                 Tarik & letakkan file video Anda di sini, atau klik untuk memilih file video Anda untuk dioptimalkan khusus Status WhatsApp HD.
               </p>
               <div className="mt-8 flex flex-wrap gap-3 justify-center">
-                <span className="px-3 py-1 bg-emerald-50 text-xs text-emerald-750 border border-emerald-200 font-bold rounded-full flex items-center gap-1">
+                <span className="px-3 py-1 bg-emerald-50 dark:bg-emerald-950/30 text-xs text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900/40 font-bold rounded-full flex items-center gap-1 transition-colors">
                   <MessageCircle className="w-3.5 h-3.5 fill-emerald-600 stroke-none" /> Status WhatsApp HD
                 </span>
-                <span className="px-3 py-1 bg-[#d3e3fd] text-xs text-[#0b57d0] font-bold rounded-full">MP4, WebM, MOV</span>
-                <span className="px-3 py-1 bg-[#d3e3fd] text-xs text-[#0b57d0] font-bold rounded-full">Optimal 720p 30 FPS</span>
+                <span className="px-3 py-1 bg-[#d3e3fd] dark:bg-slate-800 text-xs text-[#0b57d0] dark:text-slate-300 font-bold rounded-full transition-colors">MP4, WebM, MOV</span>
+                <span className="px-3 py-1 bg-[#d3e3fd] dark:bg-slate-800 text-xs text-[#0b57d0] dark:text-slate-300 font-bold rounded-full transition-colors">Optimal 720p 30 FPS</span>
               </div>
             </div>
           </motion.div>
@@ -350,19 +350,19 @@ export default function Compressor() {
             className="space-y-6"
           >
             {/* Header block info design */}
-            <div className="bg-white rounded-[32px] p-6 shadow-sm border border-[#e0e3e7] flex flex-col md:flex-row gap-6 items-start md:items-center justify-between">
+            <div className="bg-white dark:bg-slate-900 rounded-[32px] p-6 shadow-sm border border-[#e0e3e7] dark:border-slate-800 flex flex-col md:flex-row gap-6 items-start md:items-center justify-between transition-colors duration-500">
               <div className="flex gap-4 items-center">
-                <div className="w-12 h-12 rounded-2xl bg-[#d3e3fd] text-[#0b57d0] flex items-center justify-center font-bold">
+                <div className="w-12 h-12 rounded-2xl bg-[#d3e3fd] dark:bg-blue-950/40 text-[#0b57d0] dark:text-blue-400 flex items-center justify-center font-bold">
                   <Video className="w-6 h-6" />
                 </div>
                 <div>
-                  <h4 className="text-base font-bold text-[#1f1f1f] line-clamp-1 max-w-sm sm:max-w-md">{metadata?.name}</h4>
-                  <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-[#444746] mt-1">
-                    <span>Durasi: <strong className="text-[#1f1f1f]">{metadata ? formatTime(metadata.duration) : '...'}</strong></span>
+                  <h4 className="text-base font-bold text-[#1f1f1f] dark:text-slate-100 line-clamp-1 max-w-sm sm:max-w-md">{metadata?.name}</h4>
+                  <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-[#444746] dark:text-slate-400 mt-1">
+                    <span>Durasi: <strong className="text-[#1f1f1f] dark:text-slate-200">{metadata ? formatTime(metadata.duration) : '...'}</strong></span>
                     <span>•</span>
-                    <span>Ukuran: <strong className="text-[#1f1f1f]">{metadata ? formatBytes(metadata.size) : '...'}</strong></span>
+                    <span>Ukuran: <strong className="text-[#1f1f1f] dark:text-slate-200">{metadata ? formatBytes(metadata.size) : '...'}</strong></span>
                     <span>•</span>
-                    <span>Resolusi: <strong className="text-[#1f1f1f]">{metadata ? `${metadata.width}x${metadata.height}` : '...'}</strong></span>
+                    <span>Resolusi: <strong className="text-[#1f1f1f] dark:text-slate-200">{metadata ? `${metadata.width}x${metadata.height}` : '...'}</strong></span>
                   </div>
                 </div>
               </div>
@@ -372,7 +372,7 @@ export default function Compressor() {
                   id="btn-compress-reset"
                   onClick={resetAll}
                   disabled={isProcessing}
-                  className="px-4 py-2 border border-[#c2c7cf] text-[#444746] text-sm font-semibold rounded-full hover:bg-[#f8f9fa] disabled:opacity-50 transition-colors"
+                  className="px-4 py-2 border border-[#c2c7cf] dark:border-slate-700 text-[#444746] dark:text-slate-300 text-sm font-semibold rounded-full hover:bg-[#f8f9fa] dark:hover:bg-slate-800 disabled:opacity-50 transition-colors cursor-pointer"
                 >
                   Ganti Video
                 </button>
@@ -380,24 +380,24 @@ export default function Compressor() {
             </div>
 
             {/* Target Output Config Panel */}
-            <div className="bg-white rounded-[32px] p-6 shadow-sm border border-[#e0e3e7] grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-white dark:bg-slate-900 rounded-[32px] p-6 shadow-sm border border-[#e0e3e7] dark:border-slate-800 grid grid-cols-1 md:grid-cols-2 gap-6 transition-colors duration-500">
               <div>
-                <h3 className="text-lg font-bold text-[#1f1f1f] mb-4 flex items-center gap-2">
-                  <Sliders className="w-5 h-5 text-[#0b57d0]" />
+                <h3 className="text-lg font-bold text-[#1f1f1f] dark:text-slate-100 mb-4 flex items-center gap-2">
+                  <Sliders className="w-5 h-5 text-[#0b57d0] dark:text-blue-400" />
                   Konfigurasi Output Target
                 </h3>
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between p-3 bg-[#f1f3f4] rounded-2xl">
-                    <span className="text-sm font-semibold text-[#444746]">Resolusi</span>
-                    <span className="px-3 py-1 bg-[#0b57d0] text-xs font-bold text-white rounded-full">720p (HD)</span>
+                  <div className="flex items-center justify-between p-3 bg-[#f1f3f4] dark:bg-slate-800/80 rounded-2xl">
+                    <span className="text-sm font-semibold text-[#444746] dark:text-slate-300">Resolusi</span>
+                    <span className="px-3 py-1 bg-[#0b57d0] dark:bg-blue-600 text-xs font-bold text-white rounded-full">720p (HD)</span>
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-[#f1f3f4] rounded-2xl">
-                    <span className="text-sm font-semibold text-[#444746]">Frame Rate</span>
-                    <span className="px-3 py-1 bg-[#0b57d0] text-xs font-bold text-white rounded-full">30 FPS</span>
+                  <div className="flex items-center justify-between p-3 bg-[#f1f3f4] dark:bg-slate-800/80 rounded-2xl">
+                    <span className="text-sm font-semibold text-[#444746] dark:text-slate-300">Frame Rate</span>
+                    <span className="px-3 py-1 bg-[#0b57d0] dark:bg-blue-600 text-xs font-bold text-white rounded-full">30 FPS</span>
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-[#f1f3f4] rounded-2xl">
-                    <span className="text-sm font-semibold text-[#444746]">Bitrate Audio & Video</span>
-                    <span className="px-3 py-1 bg-[#d3e3fd] text-xs font-bold text-[#0b57d0] rounded-full">High-Compression (Optimal)</span>
+                  <div className="flex items-center justify-between p-3 bg-[#f1f3f4] dark:bg-slate-800/80 rounded-2xl">
+                    <span className="text-sm font-semibold text-[#444746] dark:text-slate-300">Bitrate Audio & Video</span>
+                    <span className="px-3 py-1 bg-[#d3e3fd] dark:bg-blue-950/40 text-xs font-bold text-[#0b57d0] dark:text-blue-400 rounded-full">High-Compression (Optimal)</span>
                   </div>
                 </div>
 
@@ -408,33 +408,33 @@ export default function Compressor() {
                     checked={muteDuringProcess}
                     onChange={(e) => setMuteDuringProcess(e.target.checked)}
                     disabled={isProcessing}
-                    className="w-4 h-4 text-[#0b57d0] border-[#c2c7cf] rounded focus:ring-[#0b57d0] cursor-pointer"
+                    className="w-4 h-4 text-[#0b57d0] border-[#c2c7cf] dark:border-slate-700 rounded focus:ring-[#0b57d0] cursor-pointer"
                   />
-                  <label htmlFor="chk-mute" className="text-xs font-semibold text-[#444746] cursor-pointer select-none">
+                  <label htmlFor="chk-mute" className="text-xs font-semibold text-[#444746] dark:text-slate-300 cursor-pointer select-none">
                     Senyapkan video saat melakukan proses kompresi
                   </label>
                 </div>
               </div>
 
               {/* Warning/Info Box on Client Processing */}
-              <div className="flex flex-col justify-between bg-[#eff4f9] rounded-2xl p-5 border border-[#dee1e5]">
+              <div className="flex flex-col justify-between bg-[#eff4f9] dark:bg-slate-805/30 rounded-2xl p-5 border border-[#dee1e5] dark:border-slate-800">
                 <div className="space-y-2">
-                  <h4 className="text-sm font-bold text-[#0b57d0] flex items-center gap-1.5">
-                    <Info className="w-4 h-4 text-[#0b57d0]" />
+                  <h4 className="text-sm font-bold text-[#0b57d0] dark:text-blue-400 flex items-center gap-1.5">
+                    <Info className="w-4 h-4 text-[#0b57d0] dark:text-blue-400" />
                     Bagaimana cara kerjanya?
                   </h4>
-                  <p className="text-xs text-[#444746] leading-relaxed">
+                  <p className="text-xs text-[#444746] dark:text-slate-300 leading-relaxed">
                     Aplikasi ini menggunakan teknologi <strong>HTML5 Canvas</strong> dan <strong>MediaStream Recording</strong> langsung di dalam browser Anda. Keuntungan:
                   </p>
-                  <ul className="list-disc pl-4 text-xs text-[#444746] space-y-1 mt-2">
+                  <ul className="list-disc pl-4 text-xs text-[#444746] dark:text-slate-300 space-y-1 mt-2">
                     <li>Pemrosesan lokal tanpa upload server - <strong>100% aman & cepat!</strong></li>
                     <li>Sangat hemat kuota karena tidak perlu mengirim video ratusan MB ke server.</li>
                     <li>Kompresi dilakukan real-time seiring berputarnya video.</li>
                   </ul>
                 </div>
 
-                <div className="mt-4 p-3 bg-[#d3e3fd]/40 rounded-xl flex items-center gap-2 text-[#444746] text-xs">
-                  <ShieldAlert className="w-4 h-4 text-[#0b57d0] flex-shrink-0" />
+                <div className="mt-4 p-3 bg-[#d3e3fd]/40 dark:bg-blue-950/20 rounded-xl flex items-center gap-2 text-[#444746] dark:text-slate-300 text-xs">
+                  <ShieldAlert className="w-4 h-4 text-[#0b57d0] dark:text-blue-400 flex-shrink-0" />
                   <span>Harap tidak meminimalisir tab ini selagi kompresi sedang berlangsung.</span>
                 </div>
               </div>
@@ -451,17 +451,17 @@ export default function Compressor() {
             {/* Canvas/Progress Screen */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Left Action / Player View */}
-              <div className="bg-white rounded-[32px] p-6 shadow-sm border border-[#e0e3e7] flex flex-col justify-between min-h-[300px]">
+              <div className="bg-white dark:bg-slate-900 rounded-[32px] p-6 shadow-sm border border-[#e0e3e7] dark:border-slate-800 flex flex-col justify-between min-h-[300px] transition-colors duration-500">
                 <div className="space-y-4">
-                  <h3 className="text-base font-bold text-[#1f1f1f]">Kompresor Control & Status</h3>
+                  <h3 className="text-base font-bold text-[#1f1f1f] dark:text-slate-100">Kompresor Control & Status</h3>
                   
                   {!isProcessing && !compressedBlobUrl && (
                     <div className="py-8 text-center space-y-4">
-                      <p className="text-sm text-[#444746]">Video siap untuk dikompresi ke format 720p 30fps.</p>
+                      <p className="text-sm text-[#444746] dark:text-slate-300">Video siap untuk dikompresi ke format 720p 30fps.</p>
                       <button
                         id="btn-start-compression"
                         onClick={startCompression}
-                        className="w-full sm:w-auto px-8 py-3.5 bg-[#0b57d0] hover:bg-[#0842a0] text-white rounded-full font-bold shadow-md shadow-blue-100 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 cursor-pointer"
+                        className="w-full sm:w-auto px-8 py-3.5 bg-[#0b57d0] hover:bg-[#0842a0] text-white rounded-full font-bold shadow-md shadow-blue-105 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 cursor-pointer"
                       >
                         <RefreshCw className="w-5 h-5 animate-spin" style={{ animationDuration: '4s' }} />
                         Mulai Proses Kompresi
@@ -471,13 +471,13 @@ export default function Compressor() {
 
                   {isProcessing && (
                     <div className="space-y-4 py-4">
-                      <div className="flex justify-between text-sm text-[#444746]">
+                      <div className="flex justify-between text-sm text-[#444746] dark:text-slate-300">
                         <span>{statusMessage}</span>
                         <span className="font-bold">{Math.round(progress)}%</span>
                       </div>
                       
                       {/* Material You Progress Indicator */}
-                      <div className="w-full h-3 bg-[#e1e3e1] rounded-full overflow-hidden">
+                      <div className="w-full h-3 bg-[#e1e3e1] dark:bg-slate-800 rounded-full overflow-hidden">
                         <motion.div
                           className="h-full bg-[#0b57d0] rounded-full"
                           initial={{ width: '0%' }}
@@ -490,7 +490,7 @@ export default function Compressor() {
                         <button
                           id="btn-cancel-compression"
                           onClick={cancelProcess}
-                          className="px-5 py-2 bg-red-50 hover:bg-red-100 text-[#0b57d0] border border-red-200 text-xs rounded-full transition-colors flex items-center gap-1 cursor-pointer font-bold"
+                          className="px-5 py-2 bg-red-50 dark:bg-red-950/20 hover:bg-red-105 text-[#0b57d0] dark:text-blue-400 border border-red-205 dark:border-red-900/40 text-xs rounded-full transition-colors flex items-center gap-1 cursor-pointer font-bold"
                         >
                           Batalkan Proses
                         </button>
@@ -499,24 +499,24 @@ export default function Compressor() {
                   )}
 
                   {compressedBlobUrl && (
-                    <div className="border border-green-150 bg-green-50/20 rounded-2xl p-5 text-center space-y-4">
-                      <div className="flex justify-center text-green-600">
+                    <div className="border border-green-150 dark:border-green-905 bg-green-50/20 dark:bg-green-950/10 rounded-2xl p-5 text-center space-y-4">
+                      <div className="flex justify-center text-green-600 dark:text-green-500">
                         <CheckCircle2 className="w-12 h-12" />
                       </div>
                       <div>
-                        <h4 className="text-base font-bold text-gray-900">Kompresi Selesai!</h4>
-                        <p className="text-xs text-[#444746] mt-1">Video berhasil dikompresi ke standard ultra-compress 720p 30fps.</p>
+                        <h4 className="text-base font-bold text-gray-900 dark:text-slate-100">Kompresi Selesai!</h4>
+                        <p className="text-xs text-[#444746] dark:text-slate-400 mt-1">Video berhasil dikompresi ke standard ultra-compress 720p 30fps.</p>
                       </div>
 
                       {/* Display Compares of sizes */}
                       <div className="grid grid-cols-2 gap-3 max-w-xs mx-auto py-2">
-                        <div className="bg-white p-2.5 rounded-xl border border-gray-100 text-center">
-                          <span className="text-[10px] text-gray-400 block font-semibold uppercase">Sebelum</span>
-                          <span className="text-sm font-bold text-[#1f1f1f]">{formatBytes(metadata?.size || 0)}</span>
+                        <div className="bg-white dark:bg-slate-800 p-2.5 rounded-xl border border-gray-100 dark:border-slate-700 text-center transition-colors">
+                          <span className="text-[10px] text-gray-400 dark:text-slate-400 block font-semibold uppercase">Sebelum</span>
+                          <span className="text-sm font-bold text-[#1f1f1f] dark:text-slate-200">{formatBytes(metadata?.size || 0)}</span>
                         </div>
-                        <div className="bg-white p-2.5 rounded-xl border border-green-100 text-center">
-                          <span className="text-[10px] text-green-500 block font-semibold uppercase">Setelah</span>
-                          <span className="text-sm font-bold text-green-600">{compressedSize ? formatBytes(compressedSize) : '...'}</span>
+                        <div className="bg-white dark:bg-slate-800 p-2.5 rounded-xl border border-green-100 dark:border-green-900/30 text-center transition-colors">
+                          <span className="text-[10px] text-green-500 dark:text-green-450 block font-semibold uppercase">Setelah</span>
+                          <span className="text-sm font-bold text-green-600 dark:text-green-400">{compressedSize ? formatBytes(compressedSize) : '...'}</span>
                         </div>
                       </div>
 
@@ -525,7 +525,7 @@ export default function Compressor() {
                           id="btn-download-compressed-v"
                           href={compressedBlobUrl}
                           download={`compressed_720p_${metadata?.name || 'video'}`}
-                          className="px-6 py-3 bg-emerald-600 hover:bg-emerald-750 text-white rounded-full font-bold shadow-md shadow-emerald-100 transition-all flex items-center justify-center gap-2 text-sm"
+                          className="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full font-bold shadow-md shadow-emerald-100 dark:shadow-none transition-all flex items-center justify-center gap-2 text-sm"
                         >
                           <MessageCircle className="w-4 h-4 fill-white stroke-none" />
                           Download Video Status WhatsApp
@@ -537,7 +537,7 @@ export default function Compressor() {
                             setCompressedSize(null);
                             setProgress(0);
                           }}
-                          className="px-5 py-3 border border-[#dee1e5] text-[#444746] rounded-full font-bold hover:bg-[#f1f3f4] transition-colors text-sm cursor-pointer"
+                          className="px-5 py-3 border border-[#dee1e5] dark:border-slate-800 text-[#444746] dark:text-slate-300 rounded-full font-bold hover:bg-[#f1f3f4] dark:hover:bg-slate-800 transition-colors text-sm cursor-pointer"
                         >
                           Ulangi Kompresi
                         </button>
@@ -547,13 +547,13 @@ export default function Compressor() {
                 </div>
 
                 {/* Subtext info for browser compatibility */}
-                <span className="text-[11px] text-gray-400 block text-center mt-4">
+                <span className="text-[11px] text-gray-400 dark:text-slate-450 block text-center mt-4">
                   Hasil download browser otomatis menggunakan format optimal (MP4 / WebM).
                 </span>
               </div>
 
               {/* Right Viewport Canvas */}
-              <div className="bg-[#1f1f1f] rounded-[32px] p-4 shadow-inner flex flex-col items-center justify-center relative overflow-hidden aspect-video border border-[#dee1e5]">
+              <div className="bg-[#1f1f1f] dark:bg-slate-950 rounded-[32px] p-4 shadow-inner flex flex-col items-center justify-center relative overflow-hidden aspect-video border border-[#dee1e5] dark:border-slate-800 transition-colors duration-500">
                 {/* Real-time Renderer Canvas Indicator */}
                 <canvas
                   id="compressor-canvas"
@@ -574,8 +574,8 @@ export default function Compressor() {
                 {/* Placeholder design while not processing */}
                 {!isProcessing && !compressedBlobUrl && (
                   <div className="text-center text-gray-500 p-8 space-y-3">
-                    <div className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center mx-auto border border-gray-700">
-                      <Video className="w-6 h-6 text-[#0b57d0]" />
+                    <div className="w-12 h-12 bg-gray-850 dark:bg-slate-900 rounded-full flex items-center justify-center mx-auto border border-gray-700 dark:border-slate-800">
+                      <Video className="w-6 h-6 text-[#0b57d0] dark:text-blue-400" />
                     </div>
                     <div>
                       <p className="text-sm font-bold text-white">Pratinjau Layar Kompresor</p>

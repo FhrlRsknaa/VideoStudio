@@ -265,10 +265,10 @@ export default function Downloader() {
     <div id="downloader-container" className="w-full max-w-4xl mx-auto py-8 px-4 space-y-8">
       
       {/* Search Input Box */}
-      <div className="bg-white rounded-[32px] p-6 sm:p-8 shadow-sm border border-[#e0e3e7] space-y-6">
+      <div className="bg-white dark:bg-slate-900 rounded-[32px] p-6 sm:p-8 shadow-sm border border-[#e0e3e7] dark:border-slate-800 space-y-6 transition-colors duration-500">
         <div className="space-y-2">
-          <label className="text-sm font-bold text-[#1f1f1f] flex items-center gap-2">
-            <LinkIcon className="w-4 h-4 text-[#0b57d0]" />
+          <label className="text-sm font-bold text-[#1f1f1f] dark:text-slate-200 flex items-center gap-2 animate-colors duration-500">
+            <LinkIcon className="w-4 h-4 text-[#0b57d0] dark:text-blue-400" />
             Tempel Link URL Video Disini
           </label>
           <div className="relative flex flex-col md:flex-row gap-3">
@@ -279,7 +279,7 @@ export default function Downloader() {
                 value={urlInput}
                 onChange={(e) => setUrlInput(e.target.value)}
                 placeholder="Masukkan link video TikTok publik Anda..."
-                className="w-full pl-11 pr-24 py-4 bg-[#f8f9fa] border border-[#c2c7cf] hover:border-[#0b57d0] focus:border-[#0b57d0] focus:ring-1 focus:ring-[#0b57d0] rounded-2xl text-sm font-medium text-[#1f1f1f] placeholder:text-[#747775] transition-all outline-none"
+                className="w-full pl-11 pr-24 py-4 bg-[#f8f9fa] dark:bg-slate-850 border border-[#c2c7cf] dark:border-slate-700 hover:border-[#0b57d0] dark:hover:border-blue-500 focus:border-[#0b57d0] dark:focus:border-blue-500 focus:ring-1 focus:ring-[#0b57d0] rounded-2xl text-sm font-medium text-[#1f1f1f] dark:text-slate-150 placeholder:text-[#747775] dark:placeholder:text-slate-400 transition-all outline-none"
                 onKeyDown={(e) => e.key === 'Enter' && handleAnalyze()}
               />
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#747775]" />
@@ -287,7 +287,7 @@ export default function Downloader() {
               <button
                 id="btn-downloader-paste"
                 onClick={handlePaste}
-                className="absolute right-3 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-[#d3e3fd] hover:bg-[#b4d1f9] text-[#0b57d0] text-xs font-bold rounded-lg transition-colors cursor-pointer flex items-center gap-1"
+                className="absolute right-3 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-[#d3e3fd] dark:bg-slate-800 hover:bg-[#b4d1f9] dark:hover:bg-slate-755 text-[#0b57d0] dark:text-blue-400 text-xs font-bold rounded-lg transition-colors cursor-pointer flex items-center gap-1"
                 title="Tempel dari Clipboard"
               >
                 Tempel Link
@@ -311,7 +311,7 @@ export default function Downloader() {
         </div>
 
         {errorMsg && (
-          <div className="bg-red-50 text-red-700 text-sm p-4 rounded-2xl flex items-center gap-2.5 border border-red-100">
+          <div className="bg-red-50 dark:bg-red-950/20 text-red-700 dark:text-red-300 text-sm p-4 rounded-2xl flex items-center gap-2.5 border border-red-100 dark:border-red-900/30 transition-colors duration-550">
             <AlertCircle className="w-5 h-5 flex-shrink-0" />
             <span className="font-semibold">{errorMsg}</span>
           </div>
@@ -320,10 +320,10 @@ export default function Downloader() {
 
       {isAnalyzing && (
         <div className="flex flex-col items-center justify-center py-12 space-y-4">
-          <div className="w-12 h-12 rounded-full border-4 border-[#d3e3fd] border-t-[#0b57d0] animate-spin" />
+          <div className="w-12 h-12 rounded-full border-4 border-[#d3e3fd] dark:border-blue-900/40 border-t-[#0b57d0] dark:border-t-blue-450 animate-spin" />
           <div className="text-center">
-            <p className="text-sm font-bold text-[#1f1f1f]">Menghubungkan ke server media...</p>
-            <p className="text-xs text-[#747775] mt-1">Mengekstrak informasi tag, video, dan link kualitas.</p>
+            <p className="text-sm font-bold text-[#1f1f1f] dark:text-slate-200 transition-colors">Menghubungkan ke server media...</p>
+            <p className="text-xs text-[#747775] dark:text-slate-400 mt-1 transition-colors">Mengekstrak informasi tag, video, dan link kualitas.</p>
           </div>
         </div>
       )}
@@ -376,25 +376,25 @@ export default function Downloader() {
             </div>
 
             {/* Right Column: Download Configuration Options */}
-            <div className="bg-white rounded-[32px] p-6 sm:p-8 border border-[#e0e3e7] flex flex-col justify-between">
+            <div className="bg-white dark:bg-slate-900 rounded-[32px] p-6 sm:p-8 border border-[#e0e3e7] dark:border-slate-800 flex flex-col justify-between transition-colors duration-500">
               
               <div className="space-y-4">
                 <div className="flex gap-3 items-start">
-                  <div className="w-10 h-10 rounded-xl bg-[#d3e3fd] text-[#0b57d0] flex items-center justify-center flex-shrink-0 font-bold">
+                  <div className="w-10 h-10 rounded-xl bg-[#d3e3fd] dark:bg-blue-950/40 text-[#0b57d0] dark:text-blue-400 flex items-center justify-center flex-shrink-0 font-bold transition-colors">
                     <Video className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="text-base font-bold text-[#1f1f1f] line-clamp-2 leading-snug">
+                    <h4 className="text-base font-bold text-[#1f1f1f] dark:text-slate-100 line-clamp-2 leading-snug transition-colors">
                       {videoMetadata.title}
                     </h4>
-                    <p className="text-xs text-[#747775] font-semibold mt-1">
-                      Kreator: <strong className="text-[#1f1f1f] font-bold">{videoMetadata.creator}</strong>
+                    <p className="text-xs text-[#747775] dark:text-slate-400 font-semibold mt-1 transition-colors">
+                      Kreator: <strong className="text-[#1f1f1f] dark:text-slate-200 font-bold">{videoMetadata.creator}</strong>
                     </p>
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-[#f0f4f9] space-y-3">
-                  <span className="text-xs font-bold text-[#747775] block uppercase tracking-wider">
+                <div className="pt-4 border-t border-[#f0f4f9] dark:border-slate-800 space-y-3 transition-colors">
+                  <span className="text-xs font-bold text-[#747775] dark:text-slate-450 block uppercase tracking-wider transition-colors">
                     Pilih Format & Kualitas Download:
                   </span>
                   
@@ -414,26 +414,26 @@ export default function Downloader() {
                           onClick={() => setSelectedQuality(quality as any)}
                           className={`w-full flex items-center justify-between p-3.5 rounded-2xl border transition-all cursor-pointer ${
                             isSelected 
-                              ? 'bg-[#f0f4f9] border-[#0b57d0] text-[#0b57d0] font-bold' 
-                              : 'bg-white border-[#dee1e5] hover:bg-[#f8f9fa] text-[#444746]'
+                              ? 'bg-[#f0f4f9] dark:bg-slate-800 border-[#0b57d0] dark:border-blue-500 text-[#0b57d0] dark:text-blue-400 font-bold' 
+                              : 'bg-white dark:bg-slate-900 border-[#dee1e5] dark:border-slate-800 hover:bg-[#f8f9fa] dark:hover:bg-slate-800/40 text-[#444746] dark:text-slate-300'
                           }`}
                         >
                           <div className="flex items-center gap-3">
-                            <div className={`p-2 rounded-lg ${isSelected ? 'bg-[#0b57d0] text-white' : 'bg-slate-100 text-[#444746]'}`}>
+                            <div className={`p-2 rounded-lg ${isSelected ? 'bg-[#0b57d0] text-white' : 'bg-slate-100 dark:bg-slate-800 text-[#444746] dark:text-slate-450'}`}>
                               {isMp3 ? <Music className="w-4 h-4" /> : <Video className="w-4 h-4" />}
                             </div>
                             <div className="text-left">
-                              <p className="text-sm font-bold uppercase tracking-tight">
+                              <p className={`text-sm font-bold uppercase tracking-tight ${isSelected ? 'text-[#0b57d0] dark:text-blue-400' : 'text-slate-800 dark:text-slate-200'}`}>
                                 {isMp3 ? 'Audio MP3' : 'Format MP4 Video'}
                               </p>
-                              <p className="text-[10px] text-[#747775] font-medium">
+                              <p className="text-[10px] text-[#747775] dark:text-slate-400 font-medium">
                                 {isMp3 ? 'Mengekstrak file suara saja • Kompresi Tinggi' : '720p Resolusi Normal'}
                               </p>
                             </div>
                           </div>
                           <div className="text-right">
                             <span className={`text-xs px-2.5 py-1.5 rounded-full font-bold ${
-                              isSelected ? 'bg-[#0b57d0] text-white' : 'bg-slate-100 text-[#1f1f1f]'
+                              isSelected ? 'bg-[#0b57d0] text-white' : 'bg-slate-100 dark:bg-slate-800 text-[#1f1f1f] dark:text-slate-200'
                             }`}>
                               ~ {size.toFixed(1)} MB
                             </span>
@@ -446,7 +446,7 @@ export default function Downloader() {
               </div>
 
               {/* Start Download button section */}
-              <div className="pt-6 border-t border-[#f0f4f9] space-y-4">
+              <div className="pt-6 border-t border-[#f0f4f9] dark:border-slate-800 space-y-4 transition-colors">
                 
                 {/* Downloading State */}
                 {isDownloading && (
