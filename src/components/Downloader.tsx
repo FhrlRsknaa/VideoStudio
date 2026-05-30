@@ -65,9 +65,8 @@ export default function Downloader() {
       return;
     }
 
-    const isTikTok = targetUrl.toLowerCase().includes('tiktok.com');
-    if (!isTikTok) {
-      setErrorMsg('Hanya link video TikTok publik yang didukung saat ini.');
+    if (!targetUrl.toLowerCase().startsWith('http://') && !targetUrl.toLowerCase().startsWith('https://')) {
+      setErrorMsg('Harap masukkan link URL video yang valid (dimulai dengan http:// atau https://).');
       return;
     }
 
@@ -94,10 +93,10 @@ export default function Downloader() {
       
       if (resData.success) {
         setVideoMetadata({
-          title: resData.title || 'TikTok Video',
-          creator: resData.author || 'TikTok Creator',
-          duration: 15,
-          platform: 'tiktok',
+          title: resData.title || 'Video',
+          creator: resData.author || 'Creator',
+          duration: resData.duration || 15,
+          platform: (resData.source as any) || 'direct',
           thumbnailUrl: resData.thumbnail || '',
           videoUrl: resData.video || '',
           musicUrl: resData.music || '',
@@ -139,7 +138,7 @@ export default function Downloader() {
 
     const fileExt = selectedQuality === 'mp3' ? 'mp3' : 'mp4';
     const cleanTitle = videoMetadata.title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-    const filename = `downloader_tiktok_${cleanTitle}.${fileExt}`;
+    const filename = `video_downloader_${cleanTitle}.${fileExt}`;
 
     const targetUrl = selectedQuality === 'mp3' && videoMetadata.musicUrl ? videoMetadata.musicUrl : videoMetadata.videoUrl;
 
@@ -278,7 +277,7 @@ export default function Downloader() {
                 type="text"
                 value={urlInput}
                 onChange={(e) => setUrlInput(e.target.value)}
-                placeholder="Masukkan link video TikTok publik Anda..."
+                placeholder="Masukkan link video/media publik..."
                 className="w-full pl-11 pr-24 py-4 bg-[#f8f9fa] dark:bg-slate-850 border border-[#c2c7cf] dark:border-slate-700 hover:border-[#0b57d0] dark:hover:border-blue-500 focus:border-[#0b57d0] dark:focus:border-blue-500 focus:ring-1 focus:ring-[#0b57d0] rounded-2xl text-sm font-medium text-[#1f1f1f] dark:text-slate-150 placeholder:text-[#747775] dark:placeholder:text-slate-400 transition-all outline-none"
                 onKeyDown={(e) => e.key === 'Enter' && handleAnalyze()}
               />

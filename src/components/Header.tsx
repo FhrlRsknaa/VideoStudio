@@ -89,7 +89,7 @@ export default function Header({ activeTab, setActiveTab, theme, setTheme }: Hea
             }`}
           >
             <Download className="w-4 h-4" />
-            Tiktok Downloader
+            Video Downloader
           </button>
 
           <button

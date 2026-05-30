@@ -46,13 +46,13 @@ export default function App() {
             <div className="w-full bg-white dark:bg-slate-900 border-b border-blue-50/10 dark:border-slate-800/60 py-8 px-4 text-center transition-colors duration-500">
               <div className="max-w-2xl mx-auto space-y-2">
                 <span className="px-3 py-1 bg-blue-50 dark:bg-blue-950/40 text-[11px] font-bold text-blue-700 dark:text-blue-300 rounded-full tracking-wider uppercase transition-colors duration-500">
-                  TikTok Downloader HD
+                  Video Downloader HD
                 </span>
                 <h2 className="text-2xl font-extrabold text-[#1f1f1f] dark:text-slate-100 tracking-tight sm:text-3xl uppercase transition-colors duration-500">
-                  TIKTOK VIDEO DOWNLOADER
+                  VIDEO DOWNLOADER
                 </h2>
                 <p className="text-sm text-gray-500 dark:text-gray-400 max-w-lg mx-auto leading-relaxed transition-colors duration-500">
-                  Download video TikTok tanpa watermark secara instan dengan kualitas HD langsung ke galeri gawai Anda.
+                  Download video tanpa watermark secara instan dengan kualitas HD langsung ke galeri gawai Anda.
                 </p>
               </div>
             </div>
