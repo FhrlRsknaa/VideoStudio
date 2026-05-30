@@ -50,7 +50,7 @@ export default function Header({ activeTab, setActiveTab }: HeaderProps) {
               <Video className="w-4 h-4" />
               <MessageCircle className="w-3 h-3 absolute -top-1 -right-1 text-emerald-500 fill-emerald-500 stroke-white stroke-[2px]" />
             </div>
-            Kompres Video
+            WhatsApp HD
           </button>
         </nav>
       </div>
