@@ -139,11 +139,18 @@ export default function Downloader() {
 
     const fileExt = selectedQuality === 'mp3' ? 'mp3' : 'mp4';
     const cleanTitle = videoMetadata.title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-    const filename = `downloader_${videoMetadata.platform}_${cleanTitle}.${fileExt}`;
+    const filename = `downloader_tiktok_${cleanTitle}.${fileExt}`;
+
+    const targetUrl = selectedQuality === 'mp3' && videoMetadata.musicUrl ? videoMetadata.musicUrl : videoMetadata.videoUrl;
+
+    if (!targetUrl) {
+      setIsDownloading(false);
+      setErrorMsg('Format video tidak tersedia.');
+      return;
+    }
 
     try {
       // Direct stream download tracker
-      const targetUrl = selectedQuality === 'mp3' && videoMetadata.musicUrl ? videoMetadata.musicUrl : videoMetadata.videoUrl;
       const response = await fetch(targetUrl, {
         referrerPolicy: 'no-referrer'
       });
@@ -190,7 +197,7 @@ export default function Downloader() {
       setDownloadStep('Menyelesaikan kaitan file media...');
       
       const link = document.createElement('a');
-      link.href = videoMetadata.videoUrl;
+      link.href = targetUrl;
       link.target = '_blank';
       link.referrerPolicy = 'no-referrer';
       link.download = filename;
@@ -392,7 +399,6 @@ export default function Downloader() {
                   </span>
                   
                   <div className="space-y-2">
-                    {/* Quality option loops */}
                     {(Object.keys(videoMetadata.sizeMB) as Array<keyof typeof videoMetadata.sizeMB>).map((quality) => {
                       const size = videoMetadata.sizeMB[quality];
                       if (size === undefined) return null;
@@ -418,14 +424,13 @@ export default function Downloader() {
                             </div>
                             <div className="text-left">
                               <p className="text-sm font-bold uppercase tracking-tight">
-                                {isMp3 ? 'Audio MP3' : `Format MP4 Video`}
+                                {isMp3 ? 'Audio MP3' : 'Format MP4 Video'}
                               </p>
                               <p className="text-[10px] text-[#747775] font-medium">
-                                {isMp3 ? 'Mengekstrak file suara saja • Kompresi Tinggi' : `${qualityStr} Resolusi HD`}
+                                {isMp3 ? 'Mengekstrak file suara saja • Kompresi Tinggi' : '720p Resolusi Normal'}
                               </p>
                             </div>
                           </div>
-                          
                           <div className="text-right">
                             <span className={`text-xs px-2.5 py-1.5 rounded-full font-bold ${
                               isSelected ? 'bg-[#0b57d0] text-white' : 'bg-slate-100 text-[#1f1f1f]'
@@ -477,7 +482,7 @@ export default function Downloader() {
                     className="w-full py-4 bg-[#0b57d0] hover:bg-[#0842a0] text-white rounded-full font-bold text-sm shadow-md shadow-blue-100 transition-all flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <Download className="w-5 h-5 animate-bounce" />
-                    <span>Mulai Download ({selectedQuality === 'mp3' ? 'MP3 Audio' : `MP4 ${selectedQuality}`})</span>
+                    <span>Mulai Download ({selectedQuality === 'mp3' ? 'MP3 Audio' : 'MP4 720p'})</span>
                   </button>
                 )}
               </div>
@@ -487,19 +492,7 @@ export default function Downloader() {
         )}
       </AnimatePresence>
 
-      {/* Helpful Instructions box */}
-      <div className="bg-[#eff4f9] rounded-3xl p-6 border border-[#dee1e5]">
-        <h4 className="text-sm font-bold text-[#0b57d0] flex items-center gap-1.5 mb-2">
-          <Info className="w-4.5 h-4.5" />
-          Kelebihan TikTok Video Downloader Kami
-        </h4>
-        <ul className="list-disc pl-5 text-xs text-[#444746] space-y-1.5 leading-relaxed font-semibold">
-          <li><strong>Tanpa Watermark:</strong> Ekstraksi file video murni tanpa logo TikTok yang mengganggu secara otomatis.</li>
-          <li><strong>Tanpa Iklan Spam:</strong> Server aman dan andal tanpa ada pop-up iklan, judi online, maupun pengalihan browser yang bersisiko.</li>
-          <li><strong>Pilihan Ekstrak Audio (MP3):</strong> Unduh trek audio MP3 dari video TikTok secara terpisah dengan kualitas tinggi.</li>
-          <li><strong>Pratinjau Langsung:</strong> Putar video di pemutar mini berkinerja tinggi sebelum mengunduh untuk memastikan video sudah benar.</li>
-        </ul>
-      </div>
+
 
     </div>
   );
