@@ -261,12 +261,12 @@ export default function Downloader() {
   };
 
   return (
-    <div id="downloader-container" className="w-full max-w-4xl mx-auto py-8 px-4 space-y-8">
+    <div id="downloader-container" className="w-full max-w-4xl mx-auto py-6 sm:py-8 px-4 space-y-6 sm:space-y-8">
       
       {/* Search Input Box */}
-      <div className="bg-white dark:bg-slate-900 rounded-[32px] p-6 sm:p-8 shadow-sm border border-[#e0e3e7] dark:border-slate-800 space-y-6 transition-colors duration-500">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl sm:rounded-[32px] p-4 sm:p-8 shadow-sm border border-[#e0e3e7] dark:border-slate-800 space-y-4 sm:space-y-6 transition-colors duration-500">
         <div className="space-y-2">
-          <label className="text-sm font-bold text-[#1f1f1f] dark:text-slate-200 flex items-center gap-2 animate-colors duration-500">
+          <label className="text-xs sm:text-sm font-bold text-[#1f1f1f] dark:text-slate-200 flex items-center gap-2 animate-colors duration-500">
             <LinkIcon className="w-4 h-4 text-[#0b57d0] dark:text-blue-400" />
             Tempel Link URL Video Disini
           </label>
@@ -278,18 +278,19 @@ export default function Downloader() {
                 value={urlInput}
                 onChange={(e) => setUrlInput(e.target.value)}
                 placeholder="Masukkan link video/media publik..."
-                className="w-full pl-11 pr-24 py-4 bg-[#f8f9fa] dark:bg-slate-850 border border-[#c2c7cf] dark:border-slate-700 hover:border-[#0b57d0] dark:hover:border-blue-500 focus:border-[#0b57d0] dark:focus:border-blue-500 focus:ring-1 focus:ring-[#0b57d0] rounded-2xl text-sm font-medium text-[#1f1f1f] dark:text-slate-150 placeholder:text-[#747775] dark:placeholder:text-slate-400 transition-all outline-none"
+                className="w-full pl-10 pr-20 sm:pr-24 py-3.5 sm:py-4 bg-[#f8f9fa] dark:bg-slate-850 border border-[#c2c7cf] dark:border-slate-700 hover:border-[#0b57d0] dark:hover:border-blue-500 focus:border-[#0b57d0] dark:focus:border-blue-500 focus:ring-1 focus:ring-[#0b57d0] rounded-2xl text-xs sm:text-sm font-medium text-[#1f1f1f] dark:text-slate-150 placeholder:text-[#747775] dark:placeholder:text-slate-400 transition-all outline-none"
                 onKeyDown={(e) => e.key === 'Enter' && handleAnalyze()}
               />
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#747775]" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-[#747775]" />
               
               <button
                 id="btn-downloader-paste"
                 onClick={handlePaste}
-                className="absolute right-3 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-[#d3e3fd] dark:bg-slate-800 hover:bg-[#b4d1f9] dark:hover:bg-slate-755 text-[#0b57d0] dark:text-blue-400 text-xs font-bold rounded-lg transition-colors cursor-pointer flex items-center gap-1"
+                className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 px-2.5 py-1.5 bg-[#d3e3fd] dark:bg-slate-800 hover:bg-[#b4d1f9] dark:hover:bg-slate-755 text-[#0b57d0] dark:text-blue-400 text-[10px] sm:text-xs font-bold rounded-lg transition-colors cursor-pointer flex items-center gap-1"
                 title="Tempel dari Clipboard"
               >
-                Tempel Link
+                <span className="hidden min-[380px]:inline">Tempel Link</span>
+                <span className="min-[380px]:hidden">Tempel</span>
               </button>
             </div>
             
@@ -297,12 +298,12 @@ export default function Downloader() {
               id="btn-downloader-analyze"
               onClick={() => handleAnalyze()}
               disabled={isAnalyzing || !urlInput}
-              className="px-8 py-4 bg-[#0b57d0] hover:bg-[#0842a0] disabled:bg-slate-200 text-white font-bold text-sm rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed group"
+              className="px-6 sm:px-8 py-3.5 sm:py-4 bg-[#0b57d0] hover:bg-[#0842a0] disabled:bg-slate-200 text-white font-bold text-xs sm:text-sm rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed group w-full md:w-auto"
             >
               {isAnalyzing && (
                 <RefreshCw className="w-4 h-4 animate-spin" />
               )}
-              {isAnalyzing ? 'Menganalisis...' : 'Analisi Link'}
+              {isAnalyzing ? 'Menganalisis...' : 'Analisis Link'}
             </button>
           </div>
         </div>
@@ -335,7 +336,7 @@ export default function Downloader() {
             className="grid grid-cols-1 md:grid-cols-2 gap-6"
           >
             {/* Left Column: Mini Video Preview Player */}
-            <div className="bg-[#1f1f1f] rounded-[32px] p-4 flex flex-col justify-between relative overflow-hidden aspect-video border border-[#dee1e5]">
+            <div className="bg-[#1f1f1f] rounded-2xl sm:rounded-[32px] p-3 sm:p-4 flex flex-col justify-between relative overflow-hidden aspect-video border border-[#dee1e5] dark:border-slate-800">
               
               {/* Media Element Player */}
               <video
@@ -345,35 +346,35 @@ export default function Downloader() {
                 playsInline
                 loop
                 referrerPolicy="no-referrer"
-                className="w-full h-full object-cover rounded-2xl shadow-xl"
+                className="w-full h-full object-cover rounded-xl sm:rounded-2xl shadow-xl"
                 onPlay={() => setIsPlaying(true)}
                 onPause={() => setIsPlaying(false)}
               />
 
               {/* Float Watermark Indicator */}
-              <div className="absolute top-6 left-6 bg-black/70 backdrop-blur-md text-white font-bold text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-xl shadow flex items-center gap-1.5 border border-white/10">
+              <div className="absolute top-4 sm:top-6 left-4 sm:left-6 bg-black/70 backdrop-blur-md text-white font-bold text-[10px] uppercase tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-xl shadow flex items-center gap-1.5 border border-white/10">
                 {getPlatformIcon(videoMetadata.platform)}
                 <span>Mini Preview</span>
               </div>
 
               {/* Float Controls Overlay */}
-              <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between bg-black/60 backdrop-blur-md p-3 rounded-2xl border border-white/10 text-white">
+              <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 flex items-center justify-between bg-black/60 backdrop-blur-md p-2 sm:p-3 rounded-xl sm:rounded-2xl border border-white/10 text-white">
                 <button
                   id="btn-downloader-play"
                   onClick={toggleVideoPlayback}
-                  className="w-9 h-9 rounded-full bg-[#0b57d0] text-white flex items-center justify-center hover:scale-105 transition-transform cursor-pointer"
+                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#0b57d0] text-white flex items-center justify-center hover:scale-105 transition-transform cursor-pointer"
                 >
-                  {isPlaying ? <Pause className="w-4 h-4 fill-white" /> : <Play className="w-4 h-4 fill-white ml-0.5" />}
+                  {isPlaying ? <Pause className="w-3.5 h-3.5 fill-white" /> : <Play className="w-3.5 h-3.5 fill-white ml-0.5" />}
                 </button>
                 <div className="text-right">
-                  <p className="text-[10px] text-white/75 font-semibold uppercase tracking-wider">Durasi</p>
-                  <p className="font-mono text-sm font-bold">{formatVideoLength(videoMetadata.duration)}</p>
+                  <p className="text-[9px] sm:text-[10px] text-white/75 font-semibold uppercase tracking-wider">Durasi</p>
+                  <p className="font-mono text-xs sm:text-sm font-bold">{formatVideoLength(videoMetadata.duration)}</p>
                 </div>
               </div>
             </div>
 
             {/* Right Column: Download Configuration Options */}
-            <div className="bg-white dark:bg-slate-900 rounded-[32px] p-6 sm:p-8 border border-[#e0e3e7] dark:border-slate-800 flex flex-col justify-between transition-colors duration-500">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl sm:rounded-[32px] p-4 sm:p-8 border border-[#e0e3e7] dark:border-slate-800 flex flex-col justify-between transition-colors duration-500">
               
               <div className="space-y-4">
                 <div className="flex gap-3 items-start">
@@ -409,27 +410,27 @@ export default function Downloader() {
                           key={qualityStr}
                           id={`downloader-quality-${qualityStr}`}
                           onClick={() => setSelectedQuality(quality as any)}
-                          className={`w-full flex items-center justify-between p-3.5 rounded-2xl border transition-all cursor-pointer ${
+                          className={`w-full flex items-center justify-between p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl border transition-all cursor-pointer gap-2 ${
                             isSelected 
                               ? 'bg-[#f0f4f9] dark:bg-slate-800 border-[#0b57d0] dark:border-blue-500 text-[#0b57d0] dark:text-blue-400 font-bold' 
                               : 'bg-white dark:bg-slate-900 border-[#dee1e5] dark:border-slate-800 hover:bg-[#f8f9fa] dark:hover:bg-slate-800/40 text-[#444746] dark:text-slate-300'
                           }`}
                         >
-                          <div className="flex items-center gap-3">
-                            <div className={`p-2 rounded-lg ${isSelected ? 'bg-[#0b57d0] text-white' : 'bg-slate-100 dark:bg-slate-800 text-[#444746] dark:text-slate-450'}`}>
-                              {isMp3 ? <Music className="w-4 h-4" /> : <Video className="w-4 h-4" />}
+                          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                            <div className={`p-1.5 sm:p-2 rounded-lg flex-shrink-0 ${isSelected ? 'bg-[#0b57d0] text-white' : 'bg-slate-100 dark:bg-slate-800 text-[#444746] dark:text-slate-450'}`}>
+                              {isMp3 ? <Music className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <Video className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
                             </div>
-                            <div className="text-left">
-                              <p className={`text-sm font-bold uppercase tracking-tight ${isSelected ? 'text-[#0b57d0] dark:text-blue-400' : 'text-slate-800 dark:text-slate-200'}`}>
+                            <div className="text-left min-w-0">
+                              <p className={`text-xs sm:text-sm font-bold uppercase tracking-tight truncate ${isSelected ? 'text-[#0b57d0] dark:text-blue-400' : 'text-slate-800 dark:text-slate-200'}`}>
                                 {isMp3 ? 'Audio MP3' : 'Format MP4 Video'}
                               </p>
-                              <p className="text-[10px] text-[#747775] dark:text-slate-400 font-medium">
-                                {isMp3 ? 'Mengekstrak file suara saja • Kompresi Tinggi' : '720p Resolusi Normal'}
+                              <p className="text-[9px] sm:text-[10px] text-[#747775] dark:text-slate-400 font-medium truncate">
+                                {isMp3 ? 'File suara • Kompresi Tinggi' : '720p Resolusi Normal'}
                               </p>
                             </div>
                           </div>
-                          <div className="text-right">
-                            <span className={`text-xs px-2.5 py-1.5 rounded-full font-bold ${
+                          <div className="text-right flex-shrink-0">
+                            <span className={`text-[10px] sm:text-xs px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-full font-bold ${
                               isSelected ? 'bg-[#0b57d0] text-white' : 'bg-slate-100 dark:bg-slate-800 text-[#1f1f1f] dark:text-slate-200'
                             }`}>
                               ~ {size.toFixed(1)} MB
