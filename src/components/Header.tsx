@@ -1,13 +1,11 @@
-import { Video, Music, Sparkles, Download, MessageCircle, Sun, Moon } from 'lucide-react';
+import { Video, Sun, Moon } from 'lucide-react';
 
 interface HeaderProps {
-  activeTab: 'downloader' | 'compress';
-  setActiveTab: (tab: 'downloader' | 'compress') => void;
   theme: 'light' | 'dark';
   setTheme: (theme: 'light' | 'dark') => void;
 }
 
-export default function Header({ activeTab, setActiveTab, theme, setTheme }: HeaderProps) {
+export default function Header({ theme, setTheme }: HeaderProps) {
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
@@ -20,12 +18,12 @@ export default function Header({ activeTab, setActiveTab, theme, setTheme }: Hea
         {/* Title Logo */}
         <div className="flex items-center gap-3.5">
           <div className="w-9 h-9 bg-[#0b57d0] dark:bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-sm transition-colors duration-500">
-            <Sparkles className="w-5 h-5" />
+            <Video className="w-5 h-5" />
           </div>
           <div className="flex items-center gap-3">
             <div>
               <h1 className="text-xl font-bold text-[#0b57d0] dark:text-blue-400 tracking-tight flex items-center gap-1.5 transition-colors duration-500">
-                VideoStudio
+                VideoDownloader
               </h1>
               <p className="text-xs text-[#747775] dark:text-slate-400 font-semibold transition-colors duration-500">( UJI PENGEMBANGAN )</p>
             </div>
@@ -76,38 +74,6 @@ export default function Header({ activeTab, setActiveTab, theme, setTheme }: Hea
             </div>
           </div>
         </div>
-
-        {/* Material You Style Segmented Control Tab */}
-        <nav className="flex bg-[#f0f4f9] dark:bg-slate-800 p-1.5 rounded-full border border-[#dee1e5] dark:border-slate-700 transition-colors duration-500">
-          <button
-            id="tab-downloader"
-            onClick={() => setActiveTab('downloader')}
-            className={`flex items-center gap-2 px-6 py-2.5 text-sm font-semibold rounded-full transition-all duration-300 ${
-              activeTab === 'downloader'
-                ? 'bg-[#0b57d0] dark:bg-blue-600 text-white shadow-md shadow-blue-100 dark:shadow-none'
-                : 'text-[#444746] dark:text-slate-300 hover:text-[#0b57d0] dark:hover:text-blue-400 hover:bg-[#d3e3fd]/40 dark:hover:bg-slate-700/50'
-            }`}
-          >
-            <Download className="w-4 h-4" />
-            Video Downloader
-          </button>
-
-          <button
-            id="tab-compress"
-            onClick={() => setActiveTab('compress')}
-            className={`flex items-center gap-2 px-6 py-2.5 text-sm font-semibold rounded-full transition-all duration-300 ${
-              activeTab === 'compress'
-                ? 'bg-[#0c592a] dark:bg-emerald-600 text-white shadow-md shadow-emerald-100 dark:shadow-none'
-                : 'text-[#444746] dark:text-slate-300 hover:text-[#0b57d0] dark:hover:text-emerald-400 hover:bg-[#d3e3fd]/40 dark:hover:bg-slate-700/50'
-            }`}
-          >
-            <div className="relative flex items-center justify-center w-5 h-5 mr-0.5">
-              <Video className="w-4 h-4" />
-              <MessageCircle className="w-3 h-3 absolute -top-1 -right-1 text-emerald-500 fill-emerald-500 stroke-white dark:stroke-slate-900 stroke-[2px]" />
-            </div>
-            WhatsApp HD
-          </button>
-        </nav>
       </div>
     </header>
   );

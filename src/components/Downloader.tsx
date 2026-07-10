@@ -61,12 +61,12 @@ export default function Downloader() {
   // Load a video URL analyzer calling our Express backend api
   const handleAnalyze = async (targetUrl: string = urlInput) => {
     if (!targetUrl.trim()) {
-      setErrorMsg('Harap masukkan link video terlebih dahulu.');
+      setErrorMsg('masukkan link videonya dulu.');
       return;
     }
 
     if (!targetUrl.toLowerCase().startsWith('http://') && !targetUrl.toLowerCase().startsWith('https://')) {
-      setErrorMsg('Harap masukkan link URL video yang valid (dimulai dengan http:// atau https://).');
+      setErrorMsg('masukkan link video yang valid (dimulai dengan http:// atau https://).');
       return;
     }
 
@@ -125,7 +125,7 @@ export default function Downloader() {
       handleAnalyze(text);
     } catch (err) {
       // Clipboard fallback if permissions blocked in preview iframe
-      setErrorMsg('Sistem clipboard browser diblokir. Harap tempelkan URL secara manual.');
+      setErrorMsg('Sistem clipboard browser diblokir. Coba tempelkan link secara manual.');
     }
   };
 
@@ -299,12 +299,10 @@ export default function Downloader() {
               disabled={isAnalyzing || !urlInput}
               className="px-8 py-4 bg-[#0b57d0] hover:bg-[#0842a0] disabled:bg-slate-200 text-white font-bold text-sm rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed group"
             >
-              {isAnalyzing ? (
+              {isAnalyzing && (
                 <RefreshCw className="w-4 h-4 animate-spin" />
-              ) : (
-                <Sparkles className="w-4 h-4 group-hover:scale-110 transition-transform" />
               )}
-              {isAnalyzing ? 'Menganalisis...' : 'Analisis File'}
+              {isAnalyzing ? 'Menganalisis...' : 'Analisi Link'}
             </button>
           </div>
         </div>

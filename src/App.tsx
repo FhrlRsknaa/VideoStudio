@@ -5,12 +5,10 @@
 
 import { useState, useEffect } from 'react';
 import Header from './components/Header';
-import Compressor from './components/Compressor';
 import Downloader from './components/Downloader';
 import { Info, MessageCircle } from 'lucide-react';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'downloader' | 'compress'>('downloader');
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('theme');
@@ -34,51 +32,29 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col antialiased selection:bg-blue-100 selection:text-blue-800 transition-colors duration-500">
-      {/* Header with Segmented Tab Control */}
-      <Header activeTab={activeTab} setActiveTab={setActiveTab} theme={theme} setTheme={setTheme} />
+      {/* Header */}
+      <Header theme={theme} setTheme={setTheme} />
 
       {/* Main Content Area */}
       <main className="flex-grow">
-        {/* Dynamic Section rendering with gorgeous fluid entry */}
-        {activeTab === 'downloader' ? (
-          <div>
-            {/* Visual Intro banner for Downloader section */}
-            <div className="w-full bg-white dark:bg-slate-900 border-b border-blue-50/10 dark:border-slate-800/60 py-8 px-4 text-center transition-colors duration-500">
-              <div className="max-w-2xl mx-auto space-y-2">
-                <span className="px-3 py-1 bg-blue-50 dark:bg-blue-950/40 text-[11px] font-bold text-blue-700 dark:text-blue-300 rounded-full tracking-wider uppercase transition-colors duration-500">
-                  Video Downloader HD
-                </span>
-                <h2 className="text-2xl font-extrabold text-[#1f1f1f] dark:text-slate-100 tracking-tight sm:text-3xl uppercase transition-colors duration-500">
-                  VIDEO DOWNLOADER
-                </h2>
-                <p className="text-sm text-gray-500 dark:text-gray-400 max-w-lg mx-auto leading-relaxed transition-colors duration-500">
-                  Download video tanpa watermark secara instan dengan kualitas HD langsung ke galeri gawai Anda.
-                </p>
-              </div>
+        <div>
+          {/* Visual Intro banner for Downloader section */}
+          <div className="w-full bg-white dark:bg-slate-900 border-b border-blue-50/10 dark:border-slate-800/60 py-8 px-4 text-center transition-colors duration-500">
+            <div className="max-w-2xl mx-auto space-y-2">
+              <span className="px-3 py-1 bg-blue-50 dark:bg-blue-950/40 text-[11px] font-bold text-blue-700 dark:text-blue-300 rounded-full tracking-wider uppercase transition-colors duration-500">
+                Video Downloader HD
+              </span>
+              <h2 className="text-2xl font-extrabold text-[#1f1f1f] dark:text-slate-100 tracking-tight sm:text-3xl uppercase transition-colors duration-500">
+                VIDEO DOWNLOADER
+              </h2>
+              <p className="text-sm text-gray-500 dark:text-gray-400 max-w-lg mx-auto leading-relaxed transition-colors duration-500">
+                Download video tiktok,instagram,fesnuk,twitter disini
+              </p>
             </div>
-            
-            <Downloader />
           </div>
-        ) : (
-          <div>
-            {/* Visual Intro banner for Compressor section */}
-            <div className="w-full bg-white dark:bg-slate-900 border-b border-blue-50/10 dark:border-slate-800/60 py-8 px-4 text-center transition-colors duration-500">
-              <div className="max-w-2xl mx-auto space-y-2">
-                <span className="px-3 py-1 bg-blue-50 dark:bg-blue-950/40 text-[11px] font-bold text-blue-700 dark:text-blue-300 rounded-full tracking-wider uppercase transition-colors duration-500">
-                  Optimal 720p 30fps
-                </span>
-                <h2 className="text-2xl font-extrabold text-[#1f1f1f] dark:text-slate-100 tracking-tight sm:text-3xl transition-colors duration-500">
-                  BUAT VIDEO KAMU MENJADI HD DI WHATSAAP
-                </h2>
-                <p className="text-sm text-gray-500 dark:text-gray-400 max-w-lg mx-auto leading-relaxed transition-colors duration-500">
-                  Perkecil ukuran file video Anda menjadi standard resolusi optimal 720p pada frame rate 30 FPS tanpa mengurangi kestabilan sinyal audio asli.
-                </p>
-              </div>
-            </div>
-
-            <Compressor />
-          </div>
-        )}
+          
+          <Downloader />
+        </div>
       </main>
 
       {/* Styled Google Material You inspired footer */}
@@ -89,7 +65,7 @@ export default function App() {
             <span>web ini dalam pengembangan jadi maklumin ya kalo masih bug/gagal.</span>
           </div>
           <div>
-            <span>© 2026 Video Studio By Fahrul</span>
+            <span>© 2026 Video Downloader By Fhrl</span>
           </div>
         </div>
 
